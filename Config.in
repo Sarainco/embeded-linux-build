@@ -12,4 +12,12 @@ config BUILD_BUSYBOX
     bool "Build BusyBox"
     default y
 
+config TOOLCHAIN_PATH
+    string "Toolchain Path"
+    default "toolchain/arm-linux-gnueabihf"
+
+config CROSS_COMPILE_PREFIX
+    string "Cross Compile Prefix"
+    default "arm-linux-gnueabihf-"
+
 endmenu
