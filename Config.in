@@ -1,0 +1,15 @@
+menu "Build Options"
+
+config BUILD_UBOOT
+    bool "Build U-Boot"
+    default y
+
+config BUILD_KERNEL
+    bool "Build Linux Kernel"
+    default y
+
+config BUILD_BUSYBOX
+    bool "Build BusyBox"
+    default y
+
+endmenu
