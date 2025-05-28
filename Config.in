@@ -1,23 +1,32 @@
-menu "Build Options"
+mainmenu "X Router Configuration"
 
-config BUILD_UBOOT
-    bool "Build U-Boot"
-    default y
+menu "Generic Options"
 
-config BUILD_KERNEL
-    bool "Build Linux Kernel"
-    default y
+config ARCH
+	string
+	default "arm" if ARM
+	default "arm64" if ARM64
+	default "x86" if X86
 
-config BUILD_BUSYBOX
-    bool "Build BusyBox"
-    default y
+choice
+	prompt "ARCH"
+	default ARM
 
-config TOOLCHAIN_PATH
-    string "Toolchain Path"
-    default "toolchain/arm-linux-gnueabihf"
+config ARM
+	bool "arm"
 
-config CROSS_COMPILE_PREFIX
-    string "Cross Compile Prefix"
-    default "arm-linux-gnueabihf-"
+config ARM64
+	bool "arm64"
+
+config X86
+	bool "x86"
+
+endchoice
+
+config TARBALL_DIR
+	string "tarball directory"
+	default "~/tarballs"
 
 endmenu
+
+source toolchain/Config.in

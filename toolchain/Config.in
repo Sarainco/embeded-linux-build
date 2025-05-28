@@ -1,0 +1,11 @@
+menu "Toolchain Options"
+
+config TOOLCHAIN_PATH
+    string "Toolchain Path"
+    default "toolchain/arm-linux-gnueabihf"
+
+config CROSS_COMPILE_PREFIX
+    string "Cross Compile Prefix"
+    default "arm-linux-gnueabihf-"
+
+endmenu
