@@ -1,0 +1,3504 @@
+From 06e5bb6e4fb8f8770b02c5bc8a08212fa558251b Mon Sep 17 00:00:00 2001
+From: yuji <yujibuzailai_sun@outlook.com>
+Date: Fri, 30 May 2025 10:20:20 +0800
+Subject: [PATCH] dts_lcd_sensor_config
+
+---
+ .../rockchip/rk3568-atk-atompi-ca1-1080p.dts  |   87 -
+ .../rk3568-atk-atompi-ca1-10p1_800x1280.dts   |  244 ---
+ .../rockchip/rk3568-atk-atompi-ca1-720p.dts   |   30 -
+ .../dts/rockchip/rk3568-atk-atompi-ca1.dts    |  264 +++-
+ .../dts/rockchip/rk3568-atk-atompi-ca1.dtsi   |   50 +-
+ arch/arm64/configs/rockchip_linux_defconfig   |   59 +-
+ defconfig                                     |  613 +++++++
+ drivers/media/i2c/sc132gs.c                   | 1407 +++++++----------
+ drivers/media/i2c/sc132gs_ioctl.h             |   65 +
+ make.sh                                       |    4 +-
+ 10 files changed, 1480 insertions(+), 1343 deletions(-)
+ delete mode 100644 arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-1080p.dts
+ delete mode 100644 arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-10p1_800x1280.dts
+ delete mode 100644 arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-720p.dts
+ create mode 100644 defconfig
+ create mode 100644 drivers/media/i2c/sc132gs_ioctl.h
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-1080p.dts b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-1080p.dts
+deleted file mode 100644
+index 80c7d3b90..000000000
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-1080p.dts
++++ /dev/null
+@@ -1,87 +0,0 @@
+-#include "rk3568-atk-atompi-ca1.dts"
+-
+-&backlight {
+-	status = "okay";
+-};
+-
+-&dsi0 {
+-	status = "okay";
+-};
+-
+-&dsi0_in_vp1 {
+-	status = "okay";
+-};
+-
+-&route_dsi0 {
+-	connect = <&vp1_out_dsi0>;
+-	status = "okay";
+-};
+-
+-&video_phy0 {
+-	status = "okay";
+-};
+-
+-&dsi0_panel {
+-	status = "okay";
+-	panel-init-sequence = [
+-		39 00 04 B9 FF 83 99
+-		15 00 02 D2 77
+-		//15 00 02 CC 04(倒向显示)
+-		//15 00 02 CC 08(正向显示)
+-		15 00 02 CC 04
+-		39 00 10 B1 02 04 74 94 01 32 33 11 11 AB 4D 56 73 02 02
+-		39 00 10 B2 00 80 80 AE 05 07 5A 11 00 00 10 1E 70 03 D4
+-		39 00 2D B4 00 FF 02 C0 02 C0 00 00 08 00 04 06 00 32 04 0A 08 21 03 01 00 0F B8 8B 02 C0 02 C0 00 00 08 00 04 06 00 32 04 0A 08 01 00 0F B8 01
+-		39 05 22 D3 00 00 00 00 00 00 06 00 00 10 04 00 04 00 00 00 00 00 00 00 00 00 00 01 00 05 05 07 00 00 00 05 40
+-		39 05 21 D5 18 18 19 19 18 18 21 20 01 00 07 06 05 04 03 02 18 18 18 18 18 18 2F 2F 30 30 31 31 18 18 18 18
+-		39 05 21 D6 18 18 19 19 40 40 20 21 02 03 04 05 06 07 00 01 40 40 40 40 40 40 2F 2F 30 30 31 31 40 40 40 40
+-		39 00 11 D8 A2 AA 02 A0 A2 A8 02 A0 B0 00 00 00 B0 00 00 00
+-		15 00 02 BD 01
+-		39 00 11 D8 B0 00 00 00 B0 00 00 00 E2 AA 03 F0 E2 AA 03 F0
+-		15 00 02 BD 02
+-		39 00 09 D8 E2 AA 03 F0 E2 AA 03 F0
+-		15 00 02 BD 00
+-		39 00 03 B6 8D 8D
+-		39 05 37 E0 00 0E 19 13 2E 39 48 44 4D 57 5F 66 6C 76 7F 85 8A 95 9A A4 9B AB B0 5C 58 64 77 00 0E 19 13 2E 39 48 44 4D 57 5F 66 6C 76 7F 85 8A 95 9A A4 9B AB B0 5C 58 64 77
+-		05 c8 01 11
+-		05 ff 01 29
+-	];
+-};
+-
+-&disp_timings0 {
+-    dsi0_timing0: timing0 {
+-		/*
+-		clock-frequency = <136000000>; 
+-		hactive = <1080>;
+-		vactive = <1920>;
+-		hfront-porch = <45>;
+-		hsync-len = <45>;
+-		hback-porch = <5>;
+-		vfront-porch = <9>;
+-		vsync-len = <4>;
+-		vback-porch = <3>;
+-		hsync-active = <0>;
+-		vsync-active = <0>;
+-		de-active = <0>;
+-		pixelclk-active = <0>;
+-		*/
+-
+-		clock-frequency = <121000000>;
+-		hactive = <1080>;
+-		vactive = <1920>;
+-		hfront-porch = <22>;
+-		hsync-len = <20>;
+-		hback-porch = <22>;
+-		vfront-porch = <9>;
+-		vsync-len = <7>;
+-		vback-porch = <7>;
+-		hsync-active = <0>;
+-		vsync-active = <0>;
+-		de-active = <0>;
+-		pixelclk-active = <0>;
+-	};
+-};
+-
+-&dsi_touch {
+-	status = "okay";
+-};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-10p1_800x1280.dts b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-10p1_800x1280.dts
+deleted file mode 100644
+index d922a649e..000000000
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-10p1_800x1280.dts
++++ /dev/null
+@@ -1,244 +0,0 @@
+-#include "rk3568-atk-atompi-ca1.dts"
+-
+-&backlight {
+-	status = "okay";
+-};
+-
+-&dsi0 {
+-	status = "okay";
+-};
+-
+-&dsi0_in_vp1 {
+-	status = "okay";
+-};
+-
+-&route_dsi0 {
+-	connect = <&vp1_out_dsi0>;
+-	status = "okay";
+-};
+-
+-&video_phy0 {
+-	status = "okay";
+-};
+-
+-&dsi0_panel {
+-	status = "okay";
+-	panel-init-sequence = [
+-		39 05 04 FF 98 81 03
+-		05 05 02 01 00
+-		05 05 02 02 00
+-		05 05 02 03 53
+-		05 05 02 04 D3
+-		05 05 02 05 00
+-		05 05 02 06 0D
+-		05 05 02 07 08
+-		05 05 02 08 00
+-		05 05 02 09 00
+-		05 05 02 0a 00
+-		05 05 02 0b 00
+-		05 05 02 0c 00
+-		05 05 02 0d 00
+-		05 05 02 0e 00
+-		05 05 02 0f 28
+-		05 05 02 10 28
+-		05 05 02 11 00
+-		05 05 02 12 00
+-		05 05 02 13 00
+-		05 05 02 14 00
+-		05 05 02 15 00
+-		05 05 02 16 00
+-		05 05 02 17 00
+-		05 05 02 18 00
+-		05 05 02 19 00
+-		05 05 02 1a 00
+-		05 05 02 1b 00
+-		05 05 02 1c 00
+-		05 05 02 1d 00
+-		05 05 02 1e 40
+-		05 05 02 1f 80
+-		05 05 02 20 06
+-		05 05 02 21 01
+-		05 05 02 22 00
+-		05 05 02 23 00
+-		05 05 02 24 00
+-		05 05 02 25 00
+-		05 05 02 26 00
+-		05 05 02 27 00
+-		05 05 02 28 33
+-		05 05 02 29 33
+-		05 05 02 2a 00
+-		05 05 02 2b 00
+-		05 05 02 2c 00
+-		05 05 02 2d 00
+-		05 05 02 2e 00
+-		05 05 02 2f 00
+-		05 05 02 30 00
+-		05 05 02 31 00
+-		05 05 02 32 00
+-		05 05 02 33 00
+-		05 05 02 34 03
+-		05 05 02 35 00
+-		05 05 02 36 00
+-		05 05 02 37 00
+-		05 05 02 38 96
+-		05 05 02 39 00
+-		05 05 02 3a 00
+-		05 05 02 3b 00
+-		05 05 02 3c 00
+-		05 05 02 3d 00
+-		05 05 02 3e 00
+-		05 05 02 3f 00
+-		05 05 02 40 00
+-		05 05 02 41 00
+-		05 05 02 42 00
+-		05 05 02 43 00
+-		05 05 02 44 00
+-		05 05 02 50 00
+-		05 05 02 51 23
+-		05 05 02 52 45
+-		05 05 02 53 67
+-		05 05 02 54 89
+-		05 05 02 55 AB
+-		05 05 02 56 01
+-		05 05 02 57 23
+-		05 05 02 58 45
+-		05 05 02 59 67
+-		05 05 02 5a 89
+-		05 05 02 5b AB
+-		05 05 02 5c CD
+-		05 05 02 5d EF
+-		05 05 02 5e 00
+-		05 05 02 5f 08
+-		05 05 02 60 08
+-		05 05 02 61 06
+-		05 05 02 62 06
+-		05 05 02 63 01
+-		05 05 02 64 01
+-		05 05 02 65 00
+-		05 05 02 66 00
+-		05 05 02 67 02
+-		05 05 02 68 15
+-		05 05 02 69 15
+-		05 05 02 6a 14
+-		05 05 02 6b 14
+-		05 05 02 6c 0D
+-		05 05 02 6d 0D
+-		05 05 02 6e 0C
+-		05 05 02 6f 0C
+-		05 05 02 70 0F
+-		05 05 02 71 0F
+-		05 05 02 72 0E
+-		05 05 02 73 0E
+-		05 05 02 74 02
+-		05 05 02 75 08
+-		05 05 02 76 08
+-		05 05 02 77 06
+-		05 05 02 78 06
+-		05 05 02 79 01
+-		05 05 02 7a 01
+-		05 05 02 7b 00
+-		05 05 02 7c 00
+-		05 05 02 7d 02
+-		05 05 02 7e 15
+-		05 05 02 7f 15
+-		05 05 02 80 14
+-		05 05 02 81 14
+-		05 05 02 82 0D
+-		05 05 02 83 0D
+-		05 05 02 84 0C
+-		05 05 02 85 0C
+-		05 05 02 86 0F
+-		05 05 02 87 0F
+-		05 05 02 88 0E
+-		05 05 02 89 0E
+-		05 05 02 8A 02
+-		39 05 04 FF 98 81 04
+-		05 05 02 6E 2B
+-		05 05 02 6F 37
+-		05 05 02 3A 24
+-		05 05 02 8D 1A
+-		05 05 02 87 BA
+-		05 05 02 B2 D1
+-		05 05 02 88 0B
+-		05 05 02 38 01
+-		05 05 02 39 00
+-		05 05 02 B5 02
+-		05 05 02 31 25
+-		05 05 02 3B 98
+-		39 05 04 FF 98 81 01
+-		05 05 02 22 0A
+-		05 05 02 31 00
+-		05 05 02 53 3D
+-		05 05 02 55 3D
+-		05 05 02 50 B5
+-		05 05 02 51 AD
+-		05 05 02 60 06
+-		05 05 02 62 20
+-		05 05 02 A0 00
+-		05 05 02 A1 21
+-		05 05 02 A2 35
+-		05 05 02 A3 19
+-		05 05 02 A4 1E
+-		05 05 02 A5 33
+-		05 05 02 A6 27
+-		05 05 02 A7 26
+-		05 05 02 A8 AF
+-		05 05 02 A9 1B
+-		05 05 02 AA 27
+-		05 05 02 AB 8D
+-		05 05 02 AC 1A
+-		05 05 02 AD 1B
+-		05 05 02 AE 50
+-		05 05 02 AF 26
+-		05 05 02 B0 2B
+-		05 05 02 B1 54
+-		05 05 02 B2 5E
+-		05 05 02 B3 23
+-		05 05 02 C0 00
+-		05 05 02 C1 21
+-		05 05 02 C2 35
+-		05 05 02 C3 19
+-		05 05 02 C4 1E
+-		05 05 02 C5 33
+-		05 05 02 C6 27
+-		05 05 02 C7 26
+-		05 05 02 C8 AF
+-		05 05 02 C9 1B
+-		05 05 02 CA 27
+-		05 05 02 CB 8D
+-		05 05 02 CC 1A
+-		05 05 02 CD 1B
+-		05 05 02 CE 50
+-		05 05 02 CF 26
+-		05 05 02 D0 2B
+-		05 05 02 D1 54
+-		05 05 02 D2 5E
+-		05 05 02 D3 23
+-		39 05 04 FF 98 81 00
+-		05 05 02 11 00
+-		05 78 02 29 00
+-		05 78 02 35 00
+-	];
+-};
+-
+-&disp_timings0 {
+-    dsi0_timing0: timing0 {
+-		clock-frequency = <67000000>;
+-		hactive = <800>;
+-		vactive = <1280>;
+-		hfront-porch = <12>;
+-		hsync-len = <24>;
+-		hback-porch = <24>;
+-		vfront-porch = <7>;
+-		vsync-len = <2>;
+-		vback-porch = <9>;
+-		hsync-active = <0>;
+-		vsync-active = <0>;
+-		de-active = <0>;
+-		pixelclk-active = <0>;
+-	};
+-};
+-
+-&dsi_touch {
+-	status = "okay";
+-};
+\ No newline at end of file
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-720p.dts b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-720p.dts
+deleted file mode 100644
+index e6147cf8c..000000000
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1-720p.dts
++++ /dev/null
+@@ -1,30 +0,0 @@
+-#include "rk3568-atk-atompi-ca1.dts"
+-
+-&backlight {
+-	status = "okay";
+-};
+-
+-&dsi0 {
+-	status = "okay";
+-};
+-
+-&dsi0_panel {
+-	status = "okay";
+-};
+-
+-&dsi0_in_vp1 {
+-	status = "okay";
+-};
+-
+-&route_dsi0 {
+-	connect = <&vp1_out_dsi0>;
+-	status = "okay";
+-};
+-
+-&video_phy0 {
+-	status = "okay";
+-};
+-
+-&dsi_touch {
+-	status = "okay";
+-};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
+index e9958a2ba..262d9cd5e 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
+@@ -101,6 +101,45 @@
+ 		default-brightness-level = <200>;
+ 	};
+ 
++	rgb_panel: rgb-panel {
++		compatible = "simple-panel";
++		// enable-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_HIGH>;
++		// reset-gpios = <&gpio4 RK_PC7 GPIO_ACTIVE_LOW>;
++
++	    //bus-format = <MEDIA_BUS_FMT_RGB565_1X16>;
++
++		// display-timings {
++        //     native-mode = <&timing0>;
++        //     timing0: timing0 {
++        //         //clock-frequency = <33300000>; // 33.3MHz
++        //         // hactive = <854>;
++        //         // vactive = <480>;
++        //         // hsync-len = <4>;
++        //         // hback-porch = <8>;
++        //         // hfront-porch = <8>;
++        //         // vsync-len = <4>;
++        //         // vback-porch = <8>;
++        //         // vfront-porch = <8>;
++        //         // hsync-active = <0>;
++        //         // vsync-active = <0>;
++        //         // de-active = <1>;
++        //         // pixelclk-active = <0>;
++        // 	};
++		// };
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				panel_in_rgb: endpoint {
++						remote-endpoint = <&rgb_out_panel>;
++				};
++			};
++		};
++	};
++
+ };
+ 
+ &pwm3 {
+@@ -142,6 +181,11 @@
+ 	};
+ };
+ 
++&pwm9 {
++	status = "okay";
++
++};
++
+ &soc_thermal {
+ 	trips {
+ 		fan_ctrl_threshold: trip-point-2 {
+@@ -167,69 +211,69 @@
+ 		reg = <0>;
+ 		backlight = <&backlight>;
+ 		power-supply = <&vcc5v0_sys>;
+-		reset-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_LOW>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&mipi_dsi_rst>;
+-		reset-delay-ms = <100>;
+-		enable-delay-ms = <60>;
+-		prepare-delay-ms = <60>;
+-		unprepare-delay-ms = <60>;
+-		disable-delay-ms = <60>;
+-		init-delay-ms = <80>;
+-		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+-			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
++		// reset-gpios = <&gpio2 RK_PC1 GPIO_ACTIVE_LOW>;
++		// pinctrl-names = "default";
++		// pinctrl-0 = <&mipi_dsi_rst>;
++        prepare-delay-ms = <1>;     // 复位拉高后等待1ms
++        reset-delay-ms = <10>;      // 复位拉低持续10ms
++        init-delay-ms = <120>;      // 复位释放后等待120ms
++        disable-delay-ms = <10>;    // 关闭显示后延时10ms
++        unprepare-delay-ms = <120>; // 断电前等待120ms
++
++		width-mm = <31>;
++        height-mm = <41>;
++		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST)>;
+ 		dsi,format = <MIPI_DSI_FMT_RGB888>;
+-		dsi,lanes  = <4>;
+-		panel-init-sequence = [ //720p mipi屏参数
+-			39 00 04 B9 FF 83 94
+-			39 00 07 BA 63 03 68 6B B2 C0
+-			//15 00 02 36 01(倒向显示)
+-			//15 00 02 36 02(正向显示)
+-			15 00 02 36 01
+-			39 00 0B B1 48 12 72 09 32 54 71 71 57 47
+-			39 00 07 B2 00 80 64 0C 0D 2F
+-			39 00 16 B4 73 74 73 74 73 74 01 0C 86 75 00 3F 73 74 73 74 73 74 01 0C 86
+-			39 00 03 B6 6E 6E
+-			39 00 22 D3 00 00 07 07 40 07 0C 00 08 10 08 00 08 54 15 0A 05 0A 02 15 06 05 06 47 44 0A 0A 4B 10 07 07 0C 40
+-			39 00 2D D5 1C 1C 1D 1D 00 01 02 03 04 05 06 07 08 09 0A 0B 24 25 18 18 26 27 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 20 21 18 18 18 18
+-			39 00 2D D6 1C 1C 1D 1D 07 06 05 04 03 02 01 00 0B 0A 09 08 21 20 18 18 27 26 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 25 24 18 18 18 18
+-			39 00 3B E0 00 0A 15 1B 1E 21 24 22 47 56 65 66 6E 82 88 8B 9A 9D 98 A8 B9 5D 5C 61 66 6A 6F 7F 7F 00 0A 15 1B 1E 21 24 22 47 56 65 65 6E 81 87 8B 98 9D 99 A8 BA 5D 5D 62 67 6B 72 7F 7F
+-			39 00 03 C0 1F 31
+-			15 00 02 CC 03
+-			15 00 02 D4 02
+-			15 00 02 BD 02
+-			39 00 0D D8 FF FF FF FF FF FF FF FF FF FF FF FF
+-			15 00 02 BD 00
+-			15 00 02 BD 01
+-			15 00 02 B1 00
+-			15 00 02 BD 00
+-			39 00 08 BF 40 81 50 00 1A FC 01
+-			15 00 02 C6 ED
+-			05 64 01 11
+-			05 78 01 29
++		dsi,lanes  = <1>;
++		panel-init-sequence = [ //360p mipi屏参数
++            39 00 04 DF 98 51 E9
++            15 00 02 DE 00
++            39 00 05 B7 1E 7D 1E 2B
++            39 00 21 C8 3F 31 29 28 2C 31 2D 2D 2A 28 23 16 10 0E 08 0E 3F 31 29 28 2C 31 2D 2C 2A 28 23 16 10 0E 08 0E
++            39 00 04 B9 33 08 CC
++            39 00 09 BB 46 7A 30 D0 7C 60 70 70
++            39 00 03 BC 38 3C
++            39 00 03 C0 31 20
++            15 00 02 C1 12
++            39 00 0A C3 08 00 0A 10 08 54 45 71 2C
++            39 00 12 C4 00 A0 79 0E 0A 16 79 0E 0A 16 79 0E 0A 16 82 00 03
++            39 00 07 D0 04 0C 6B 0F 07 03
++            39 00 03 D7 13 00
++            15 01 02 DE 02
++            39 00 06 B8 1D A0 2F 04 33
++            39 00 05 C1 10 66 66 01
++            15 00 02 DE 00
++            05 78 01 11
++            15 01 02 DE 02
++            39 01 04 C5 4E 00 00
++            39 01 04 CA 30 20 F4
++            15 01 02 DE 04
++            15 01 02 D3 3C
++            15 01 02 DE 00
++            05 00 01 29
+ 		];
+ 
+-		panel-exit-sequence = [
+-			05 00 01 28
+-			05 00 01 10
+-		];
++		// panel-exit-sequence = [
++		// 	05 00 01 28
++		// 	05 00 01 10
++		// ];
+ 
+ 		disp_timings0: display-timings {
+ 			native-mode = <&dsi0_timing0>;
+ 			dsi0_timing0: timing0 {
+-				clock-frequency = <65000000>;
+-				hactive = <720>;
+-				vactive = <1280>;
+-				hfront-porch = <48>;
+-				hsync-len = <8>;
+-				hback-porch = <52>;
+-				vfront-porch = <16>;
+-				vsync-len = <6>;
+-				vback-porch = <15>;
+-				hsync-active = <0>;
+-				vsync-active = <0>;
+-				de-active = <0>;
+-				pixelclk-active = <0>;
++                clock-frequency = <6200000>;
++                hactive = <240>;
++                hsync-len = <4>;
++                hback-porch = <20>;
++                hfront-porch = <40>;
++                vactive = <320>;
++                vsync-len = <2>;
++                vback-porch = <6>;
++                vfront-porch = <8>;
++                hsync-active = <0>;
++                vsync-active = <0>;
++                de-active = <0>;
++                pixelclk-active = <0>;
+ 			};
+ 		};
+ 
+@@ -259,19 +303,6 @@
+ 	};
+ };
+ 
+-&dsi0_in_vp1 {
+-	status = "disabled";
+-};
+-
+-&route_dsi0 {
+-	connect = <&vp1_out_dsi0>;
+-	status = "disabled";
+-};
+-
+-&video_phy0 {
+-	status = "disabled";
+-};
+-
+ &rkisp {
+ 	status = "okay";
+ };
+@@ -316,8 +347,8 @@
+ 			};
+ 			mipi_in_ucam1: endpoint@2 {
+ 				reg = <2>;
+-				remote-endpoint = <&imx415_out>;
+-				data-lanes = <1 2 3 4>;
++				remote-endpoint = <&sc132gs_out>;
++				data-lanes = <1 2>;
+ 			};
+ 			mipi_in_ucam2: endpoint@3 {
+ 				reg = <3>;
+@@ -390,32 +421,32 @@
+ 		};
+ 	};
+ 
+-	imx415: imx415@1a {
++    sc132gs: sc132gs@33 {
++        compatible = "smartsens,sc132gs";
+ 		status = "okay";
+-		compatible = "sony,imx415";
+-		reg = <0x1a>;
++        reg = <0x33>;
+ 		clocks = <&cru CLK_CIF_OUT>;
+ 		clock-names = "xvclk";
+ 		power-domains = <&power RK3568_PD_VI>;
+ 		pinctrl-names = "rockchip,camera_default";
+ 		pinctrl-0 = <&cif_clk>;
+-		reset-gpios = <&gpio4 RK_PB4 GPIO_ACTIVE_LOW>;
+-		power-gpios = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
++		// reset-gpios = <&gpio4 RK_PB4 GPIO_ACTIVE_LOW>;
++	    //pwdn-gpios = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
+ 		rockchip,camera-module-index = <0>;
+ 		rockchip,camera-module-facing = "back";
+ 		rockchip,camera-module-name = "CMK-OT1522-FG3";
+ 		rockchip,camera-module-lens-name = "CS-P1150-IRC-8M-FAU";
+ 		port {
+-			imx415_out: endpoint {
++			sc132gs_out: endpoint {
+ 				remote-endpoint = <&mipi_in_ucam1>;
+-				data-lanes = <1 2 3 4>;
+-			};
+-		};
+-	};
++                data-lanes = <1 2>;
++            };
++        };
++    };
+ };
+ 
+ &i2c5 {
+-	status = "okay";
++	status = "disabled";
+ 	dsi_touch: gt911@14 {
+ 		compatible = "goodix,gt9xx";
+ 		reg = <0x14>;
+@@ -432,8 +463,6 @@
+ 	};
+ };
+ 
+-
+-
+ &pinctrl {
+ 
+ 	dsi {
+@@ -460,3 +489,70 @@
+ 	};
+ 
+ };
++
++
++
++
++&backlight {
++	status = "okay";
++};
++
++&dsi0 {
++	status = "okay";
++};
++
++&dsi0_panel {
++	status = "okay";
++};
++
++&dsi0_in_vp1 {
++	status = "okay";
++};
++
++&route_dsi0 {
++	connect = <&vp1_out_dsi0>;
++	status = "okay";
++};
++
++&video_phy0 {
++	status = "okay";
++};
++
++&dsi_touch {
++	status = "okay";
++};
++
++
++&rgb_in_vp2 {
++	status = "okay";
++};
++
++&route_rgb {
++	status = "okay";
++	connect = <&vp2_out_rgb>;
++};
++
++&rgb {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++			rgb_out_panel: endpoint {
++				remote-endpoint = <&panel_in_rgb>;
++			};
++		};
++	};
++};
++
++
++&gmac0 {
++	status = "disabled";
++};
++
++&gmac1 {
++	status = "disabled";
++};
+\ No newline at end of file
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dtsi
+index 00204fd01..04d455dd9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dtsi
+@@ -104,22 +104,22 @@
+ 		vin-supply = <&vcc3v3_pcie>;
+ 	};
+ 
+-    vcc3v3_pcie20_wifi: vcc3v3-pcie20-wifi-regulator {
+-		compatible = "regulator-fixed";
+-		regulator-name = "vcc3v3_pcie20_wifi";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		enable-active-high;
+-		regulator-always-on;
+-		regulator-boot-on;
+-		gpio = <&gpio3 RK_PA2 GPIO_ACTIVE_HIGH>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&vcc3v3_pcie20_wifi_en>;
+-		vin-supply = <&vcc3v3_pcie>;
+-	};
++    // vcc3v3_pcie20_wifi: vcc3v3-pcie20-wifi-regulator {
++	// 	compatible = "regulator-fixed";
++	// 	regulator-name = "vcc3v3_pcie20_wifi";
++	// 	regulator-min-microvolt = <3300000>;
++	// 	regulator-max-microvolt = <3300000>;
++	// 	enable-active-high;
++	// 	regulator-always-on;
++	// 	regulator-boot-on;
++	// 	gpio = <&gpio3 RK_PA2 GPIO_ACTIVE_HIGH>;
++	// 	pinctrl-names = "default";
++	// 	pinctrl-0 = <&vcc3v3_pcie20_wifi_en>;
++	// 	vin-supply = <&vcc3v3_pcie>;
++	// };
+ 
+     hdmi_sound: hdmi-sound {
+-		status = "okay";
++		status = "disabled";
+ 		compatible = "rockchip,hdmi";
+ 		rockchip,mclk-fs = <128>;
+ 		rockchip,card-name = "rockchip,hdmi";
+@@ -679,8 +679,8 @@
+ 
+ &vop {
+ 	status = "okay";
+-	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
+-	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
++	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>, <&cru DCLK_VOP2>;
++	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>, <&cru PLL_VPLL>;
+ 	disable-win-move;
+ };
+ 
+@@ -771,7 +771,7 @@
+ };
+ 
+ &hdmi {
+-	status = "okay";
++	status = "disabled";
+     pinctrl-names = "default";
+ 	pinctrl-0 = <&hdmitx_scl &hdmitx_sda &hdmitxm1_cec>;
+     rockchip,phy-table =
+@@ -784,7 +784,7 @@
+ };
+ 
+ &hdmi_in_vp0 {
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &hdmi_in_vp1 {
+@@ -793,7 +793,7 @@
+ 
+ &route_hdmi {
+ 	connect = <&vp0_out_hdmi>;
+-	status = "okay";
++	status = "disabled";
+ };
+ 
+ &i2s0_8ch {
+@@ -900,9 +900,9 @@
+ &pcie2x1 {
+ 	//pinctrl-names = "default";
+ 	//pinctrl-0 = <&pcie20m2_pins>;
+-	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
+-	vpcie3v3-supply = <&vcc3v3_pcie20_wifi>;
+-	status = "okay";
++	//reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
++	//vpcie3v3-supply = <&vcc3v3_pcie20_wifi>;
++	status = "disabled";
+ };
+ 
+ &pwm0 {
+@@ -957,9 +957,9 @@
+ 			rockchip,pins = <0 RK_PD6 RK_FUNC_GPIO &pcfg_pull_none>;
+ 		};
+ 
+-        vcc3v3_pcie20_wifi_en: vcc3v3-pcie20-wifi-en {
+-			rockchip,pins = <3 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
+-		};
++        // vcc3v3_pcie20_wifi_en: vcc3v3-pcie20-wifi-en {
++		// 	rockchip,pins = <3 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
++		// };
+     };
+ 
+     headphone {
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index 8197b95be..54e3346cd 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -94,13 +94,13 @@ CONFIG_SYN_COOKIES=y
+ CONFIG_NETFILTER=y
+ CONFIG_IP_NF_IPTABLES=y
+ CONFIG_IP_NF_MANGLE=y
++CONFIG_CAN=y
++CONFIG_CANFD_ROCKCHIP=y
+ CONFIG_BT=y
+ CONFIG_BT_RFCOMM=y
+ CONFIG_BT_RFCOMM_TTY=y
+ CONFIG_BT_HIDP=y
+ CONFIG_BT_HCIBTUSB=y
+-# CONFIG_BT_HCIUART=y
+-CONFIG_BT_HCIUART_ATH3K=y
+ CONFIG_BT_HCIBFUSB=y
+ CONFIG_BT_HCIVHCI=y
+ CONFIG_BT_MRVL=y
+@@ -184,36 +184,34 @@ CONFIG_STMMAC_ETH=y
+ # CONFIG_NET_VENDOR_VIA is not set
+ # CONFIG_NET_VENDOR_WIZNET is not set
+ CONFIG_ROCKCHIP_PHY=y
+-CONFIG_CAN=y
+-CONFIG_CANFD_ROCKCHIP=y
+ CONFIG_RK630_PHY=y
++CONFIG_MOTORCOMM_PHY=y
++CONFIG_PPP=y
++CONFIG_PPP_BSDCOMP=y
++CONFIG_PPP_DEFLATE=y
++CONFIG_PPP_FILTER=y
++CONFIG_PPP_MPPE=y
++CONFIG_PPP_MULTILINK=y
++CONFIG_PPPOE=y
++CONFIG_PPP_ASYNC=y
++CONFIG_PPP_SYNC_TTY=y
+ CONFIG_USB_RTL8150=y
+ CONFIG_USB_RTL8152=y
+ CONFIG_USB_NET_CDC_MBIM=y
+-CONFIG_MOTORCOMM_PHY=y
+-CONFIG_USB_NET_QMI_WWAN=y
+ # CONFIG_USB_NET_NET1080 is not set
+ # CONFIG_USB_NET_CDC_SUBSET is not set
+ # CONFIG_USB_NET_ZAURUS is not set
++CONFIG_USB_NET_QMI_WWAN=y
+ CONFIG_LIBERTAS_THINFIRM=y
+ CONFIG_MWIFIEX=m
+ CONFIG_MWIFIEX_SDIO=m
+ CONFIG_WL_ROCKCHIP=y
+ CONFIG_WIFI_BUILD_MODULE=y
+-CONFIG_WIFI_GENERATE_RANDOM_MAC_ADDR=y
+ CONFIG_WIFI_LOAD_DRIVER_WHEN_KERNEL_BOOTUP=y
++CONFIG_WIFI_GENERATE_RANDOM_MAC_ADDR=y
+ CONFIG_AP6XXX=m
+ CONFIG_RTL8852BS=m
+ CONFIG_USB_NET_RNDIS_WLAN=y
+-CONFIG_PPP=y
+-CONFIG_PPP_FILTER=y
+-CONFIG_PPP_MULTILINK=y
+-CONFIG_PPP_ASYNC=y
+-CONFIG_PPP_SYNC_TTY=y
+-CONFIG_PPP_BSDCOMP=y
+-CONFIG_PPP_DEFLATE=y
+-CONFIG_PPP_MPPE=y
+-CONFIG_PPPOE=y
+ CONFIG_INPUT_FF_MEMLESS=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_KEYBOARD_ADC=y
+@@ -240,18 +238,18 @@ CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_DEVICE_ACCESS=y
+ CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_LOADER=y
+ CONFIG_ROCKCHIP_REMOTECTL=y
+ CONFIG_ROCKCHIP_REMOTECTL_PWM=y
+-CONFIG_INPUT_MISC=y
+-CONFIG_INPUT_UINPUT=y
+-CONFIG_INPUT_RK805_PWRKEY=y
+ CONFIG_SENSOR_DEVICE=y
+-CONFIG_LIGHT_DEVICE=y
+-CONFIG_PROXIMITY_DEVICE=y
+ CONFIG_GSENSOR_DEVICE=y
++CONFIG_SH3001_ACC=y
+ CONFIG_GYROSCOPE_DEVICE=y
+ CONFIG_GYRO_SH3001=y
++CONFIG_LIGHT_DEVICE=y
+ CONFIG_LS_AP321XX=y
++CONFIG_PROXIMITY_DEVICE=y
+ CONFIG_PS_AP321XX=y
+-CONFIG_SH3001_ACC=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_UINPUT=y
++CONFIG_INPUT_RK805_PWRKEY=y
+ # CONFIG_SERIO is not set
+ CONFIG_VT_HW_CONSOLE_BINDING=y
+ # CONFIG_LEGACY_PTYS is not set
+@@ -286,14 +284,11 @@ CONFIG_CHARGER_GPIO=y
+ CONFIG_CHARGER_BQ24735=y
+ CONFIG_BATTERY_RK817=y
+ CONFIG_CHARGER_RK817=y
++CONFIG_SENSORS_PWM_FAN=y
+ CONFIG_THERMAL=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+-# CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR=y
+-CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
+ CONFIG_THERMAL_GOV_FAIR_SHARE=y
+-CONFIG_THERMAL_GOV_STEP_WISE=y
+ CONFIG_CPU_THERMAL=y
+-CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_ROCKCHIP_THERMAL=y
+ CONFIG_WATCHDOG=y
+ CONFIG_DW_WATCHDOG=y
+@@ -328,6 +323,7 @@ CONFIG_USB_VIDEO_CLASS=y
+ # CONFIG_USB_GSPCA is not set
+ CONFIG_V4L_PLATFORM_DRIVERS=y
+ CONFIG_SOC_CAMERA=y
++CONFIG_VIDEO_ROCKCHIP_CIF=y
+ CONFIG_VIDEO_ROCKCHIP_ISP1=y
+ CONFIG_VIDEO_ROCKCHIP_ISP=y
+ CONFIG_V4L_MEM2MEM_DRIVERS=y
+@@ -337,14 +333,15 @@ CONFIG_VIDEO_TC35874X=y
+ CONFIG_VIDEO_RK628_CSI=y
+ CONFIG_VIDEO_LT6911UXC=y
+ CONFIG_VIDEO_LT8619C=y
++CONFIG_VIDEO_IMX335=y
++CONFIG_VIDEO_IMX415=y
+ CONFIG_VIDEO_OS04A10=y
+ CONFIG_VIDEO_OV4689=y
+ CONFIG_VIDEO_OV5695=y
+ CONFIG_VIDEO_OV7251=y
+ CONFIG_VIDEO_OV13850=y
+ CONFIG_VIDEO_GC8034=y
+-CONFIG_VIDEO_IMX335=y
+-CONFIG_VIDEO_IMX415=y
++CONFIG_VIDEO_SC132GS=y
+ # CONFIG_VGA_ARB is not set
+ CONFIG_DRM=y
+ CONFIG_DRM_IGNORE_IOTCL_PERMIT=y
+@@ -377,7 +374,6 @@ CONFIG_MALI_PLATFORM_THIRDPARTY_NAME="rk"
+ CONFIG_MALI_DEBUG=y
+ CONFIG_MALI_PWRSOFT_765=y
+ CONFIG_MALI_BIFROST=y
+-CONFIG_MALI_BIFROST_DEVFREQ=y
+ CONFIG_MALI_PLATFORM_NAME="rk"
+ CONFIG_BACKLIGHT_LCD_SUPPORT=y
+ # CONFIG_LCD_CLASS_DEVICE is not set
+@@ -414,6 +410,7 @@ CONFIG_SND_SOC_ROCKCHIP_MULTICODECS=y
+ CONFIG_SND_SOC_ROCKCHIP_RT5645=y
+ CONFIG_SND_SOC_ROCKCHIP_RT5651_RK628=y
+ CONFIG_SND_SOC_ROCKCHIP_HDMI=y
++CONFIG_SND_SOC_BT_SCO=y
+ CONFIG_SND_SOC_DUMMY_CODEC=y
+ CONFIG_SND_SOC_ES7202=y
+ CONFIG_SND_SOC_ES7243E=y
+@@ -425,7 +422,6 @@ CONFIG_SND_SOC_RK_CODEC_DIGITAL=y
+ CONFIG_SND_SOC_RT5616=y
+ CONFIG_SND_SOC_RT5640=y
+ CONFIG_SND_SOC_SPDIF=y
+-CONFIG_SND_SOC_BT_SCO=y
+ CONFIG_SND_SIMPLE_CARD=y
+ CONFIG_HID_BATTERY_STRENGTH=y
+ CONFIG_HIDRAW=y
+@@ -511,7 +507,6 @@ CONFIG_ROCKCHIP_PM_DOMAINS=y
+ CONFIG_ROCKCHIP_PVTM=y
+ CONFIG_ROCKCHIP_SUSPEND_MODE=y
+ CONFIG_ROCKCHIP_VENDOR_STORAGE_UPDATE_LOADER=y
+-CONFIG_PM_DEVFREQ=y
+ CONFIG_DEVFREQ_GOV_PERFORMANCE=y
+ CONFIG_DEVFREQ_GOV_POWERSAVE=y
+ CONFIG_DEVFREQ_GOV_USERSPACE=y
+@@ -527,7 +522,6 @@ CONFIG_IIO_TRIGGER=y
+ CONFIG_ROCKCHIP_SARADC=y
+ CONFIG_SENSORS_ISL29018=y
+ CONFIG_SENSORS_TSL2563=y
+-CONFIG_SENSORS_PWM_FAN=y
+ CONFIG_TSL2583=y
+ CONFIG_IIO_SYSFS_TRIGGER=y
+ CONFIG_PWM=y
+@@ -599,7 +593,6 @@ CONFIG_CRYPTO_USER_API_HASH=y
+ CONFIG_CRYPTO_USER_API_SKCIPHER=y
+ CONFIG_CRYPTO_DEV_ROCKCHIP=y
+ CONFIG_CRYPTO_DEV_ROCKCHIP_DEV=y
+-CONFIG_CRC_CCITT=y
+ CONFIG_CRC_T10DIF=y
+ CONFIG_CRC7=y
+ # CONFIG_XZ_DEC_X86 is not set
+diff --git a/defconfig b/defconfig
+new file mode 100644
+index 000000000..54e3346cd
+--- /dev/null
++++ b/defconfig
+@@ -0,0 +1,613 @@
++CONFIG_DEFAULT_HOSTNAME="localhost"
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT_VOLUNTARY=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=18
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_NAMESPACES=y
++CONFIG_USER_NS=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_ROCKCHIP_ONE_INITRD is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_PROFILING=y
++CONFIG_ARCH_ROCKCHIP=y
++CONFIG_PCI=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_PCIE_DW_ROCKCHIP=y
++# CONFIG_ARM64_ERRATUM_826319 is not set
++# CONFIG_ARM64_ERRATUM_827319 is not set
++# CONFIG_ARM64_ERRATUM_824069 is not set
++# CONFIG_ARM64_ERRATUM_819472 is not set
++# CONFIG_ARM64_ERRATUM_832075 is not set
++# CONFIG_CAVIUM_ERRATUM_22375 is not set
++# CONFIG_CAVIUM_ERRATUM_23154 is not set
++CONFIG_SCHED_MC=y
++CONFIG_NR_CPUS=8
++CONFIG_HZ_300=y
++CONFIG_SECCOMP=y
++CONFIG_ARMV8_DEPRECATED=y
++CONFIG_SWP_EMULATION=y
++CONFIG_CP15_BARRIER_EMULATION=y
++CONFIG_SETEND_EMULATION=y
++# CONFIG_EFI is not set
++CONFIG_COMPAT=y
++CONFIG_PM_DEBUG=y
++CONFIG_PM_ADVANCED_DEBUG=y
++CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
++CONFIG_ENERGY_MODEL=y
++CONFIG_CPU_IDLE=y
++CONFIG_ARM_CPUIDLE=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE=y
++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_CPUFREQ_DT=y
++CONFIG_ARM_ROCKCHIP_CPUFREQ=y
++CONFIG_ARM_SCMI_PROTOCOL=y
++CONFIG_ROCKCHIP_SIP=y
++CONFIG_ARM64_CRYPTO=y
++CONFIG_CRYPTO_SHA1_ARM64_CE=y
++CONFIG_CRYPTO_SHA2_ARM64_CE=y
++CONFIG_CRYPTO_GHASH_ARM64_CE=y
++CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
++CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_PARTITION_ADVANCED=y
++# CONFIG_COMPACTION is not set
++CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
++CONFIG_CMA=y
++CONFIG_ZSMALLOC=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MROUTE=y
++CONFIG_SYN_COOKIES=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET6_XFRM_MODE_BEET is not set
++# CONFIG_IPV6_SIT is not set
++CONFIG_NETFILTER=y
++CONFIG_IP_NF_IPTABLES=y
++CONFIG_IP_NF_MANGLE=y
++CONFIG_CAN=y
++CONFIG_CANFD_ROCKCHIP=y
++CONFIG_BT=y
++CONFIG_BT_RFCOMM=y
++CONFIG_BT_RFCOMM_TTY=y
++CONFIG_BT_HIDP=y
++CONFIG_BT_HCIBTUSB=y
++CONFIG_BT_HCIBFUSB=y
++CONFIG_BT_HCIVHCI=y
++CONFIG_BT_MRVL=y
++CONFIG_BT_MRVL_SDIO=y
++CONFIG_NL80211_TESTMODE=y
++CONFIG_CFG80211_DEBUGFS=y
++CONFIG_CFG80211_WEXT=y
++CONFIG_MAC80211_LEDS=y
++CONFIG_MAC80211_DEBUGFS=y
++CONFIG_MAC80211_DEBUG_MENU=y
++CONFIG_MAC80211_VERBOSE_DEBUG=y
++CONFIG_RFKILL=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_DEBUG_DEVRES=y
++CONFIG_DMA_CMA=y
++CONFIG_CONNECTOR=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_UBI=y
++CONFIG_ZRAM=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_COUNT=1
++CONFIG_BLK_DEV_NVME=y
++CONFIG_SRAM=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_SPI_ATTRS=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI=y
++CONFIG_SATA_AHCI_PLATFORM=y
++# CONFIG_ATA_SFF is not set
++CONFIG_MD=y
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_3COM is not set
++# CONFIG_NET_VENDOR_ADAPTEC is not set
++# CONFIG_NET_VENDOR_AGERE is not set
++# CONFIG_NET_VENDOR_ALTEON is not set
++# CONFIG_NET_VENDOR_AMD is not set
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_ATHEROS is not set
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_BROCADE is not set
++# CONFIG_NET_VENDOR_CAVIUM is not set
++# CONFIG_NET_VENDOR_CHELSIO is not set
++# CONFIG_NET_VENDOR_CISCO is not set
++# CONFIG_NET_VENDOR_DEC is not set
++# CONFIG_NET_VENDOR_DLINK is not set
++# CONFIG_NET_VENDOR_EMULEX is not set
++# CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_HISILICON is not set
++# CONFIG_NET_VENDOR_HP is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MELLANOX is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_MYRI is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_NVIDIA is not set
++# CONFIG_NET_VENDOR_OKI is not set
++# CONFIG_NET_VENDOR_QLOGIC is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_RDC is not set
++# CONFIG_NET_VENDOR_REALTEK is not set
++# CONFIG_NET_VENDOR_RENESAS is not set
++# CONFIG_NET_VENDOR_ROCKER is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SILAN is not set
++# CONFIG_NET_VENDOR_SIS is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++CONFIG_STMMAC_ETH=y
++# CONFIG_NET_VENDOR_SUN is not set
++# CONFIG_NET_VENDOR_SYNOPSYS is not set
++# CONFIG_NET_VENDOR_TEHUTI is not set
++# CONFIG_NET_VENDOR_TI is not set
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_ROCKCHIP_PHY=y
++CONFIG_RK630_PHY=y
++CONFIG_MOTORCOMM_PHY=y
++CONFIG_PPP=y
++CONFIG_PPP_BSDCOMP=y
++CONFIG_PPP_DEFLATE=y
++CONFIG_PPP_FILTER=y
++CONFIG_PPP_MPPE=y
++CONFIG_PPP_MULTILINK=y
++CONFIG_PPPOE=y
++CONFIG_PPP_ASYNC=y
++CONFIG_PPP_SYNC_TTY=y
++CONFIG_USB_RTL8150=y
++CONFIG_USB_RTL8152=y
++CONFIG_USB_NET_CDC_MBIM=y
++# CONFIG_USB_NET_NET1080 is not set
++# CONFIG_USB_NET_CDC_SUBSET is not set
++# CONFIG_USB_NET_ZAURUS is not set
++CONFIG_USB_NET_QMI_WWAN=y
++CONFIG_LIBERTAS_THINFIRM=y
++CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
++CONFIG_WL_ROCKCHIP=y
++CONFIG_WIFI_BUILD_MODULE=y
++CONFIG_WIFI_LOAD_DRIVER_WHEN_KERNEL_BOOTUP=y
++CONFIG_WIFI_GENERATE_RANDOM_MAC_ADDR=y
++CONFIG_AP6XXX=m
++CONFIG_RTL8852BS=m
++CONFIG_USB_NET_RNDIS_WLAN=y
++CONFIG_INPUT_FF_MEMLESS=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_KEYBOARD_ADC=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_KEYBOARD_GPIO_POLLED=y
++CONFIG_KEYBOARD_CROS_EC=y
++# CONFIG_MOUSE_PS2 is not set
++CONFIG_MOUSE_CYAPA=y
++CONFIG_MOUSE_ELAN_I2C=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_ATMEL_MXT=y
++CONFIG_TOUCHSCREEN_GSLX680_VR=y
++CONFIG_TOUCHSCREEN_GSL3673=y
++CONFIG_TOUCHSCREEN_GT9XX=y
++CONFIG_TOUCHSCREEN_ELAN=y
++CONFIG_TOUCHSCREEN_WACOM_W9013=y
++CONFIG_TOUCHSCREEN_USB_COMPOSITE=y
++CONFIG_TOUCHSCREEN_GT1X=y
++CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5=y
++CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_DEVICETREE_SUPPORT=y
++CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_I2C=y
++CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_DEVICE_ACCESS=y
++CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5_LOADER=y
++CONFIG_ROCKCHIP_REMOTECTL=y
++CONFIG_ROCKCHIP_REMOTECTL_PWM=y
++CONFIG_SENSOR_DEVICE=y
++CONFIG_GSENSOR_DEVICE=y
++CONFIG_SH3001_ACC=y
++CONFIG_GYROSCOPE_DEVICE=y
++CONFIG_GYRO_SH3001=y
++CONFIG_LIGHT_DEVICE=y
++CONFIG_LS_AP321XX=y
++CONFIG_PROXIMITY_DEVICE=y
++CONFIG_PS_AP321XX=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_UINPUT=y
++CONFIG_INPUT_RK805_PWRKEY=y
++# CONFIG_SERIO is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_SERIAL_8250_PCI is not set
++CONFIG_SERIAL_8250_NR_UARTS=10
++CONFIG_SERIAL_8250_RUNTIME_UARTS=10
++CONFIG_SERIAL_8250_DW=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_ROCKCHIP=y
++CONFIG_TCG_TPM=y
++CONFIG_TCG_TIS_I2C_INFINEON=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_RK3X=y
++CONFIG_I2C_CROS_EC_TUNNEL=y
++CONFIG_SPI=y
++CONFIG_SPI_BITBANG=y
++CONFIG_SPI_ROCKCHIP=y
++CONFIG_SPI_SPIDEV=y
++CONFIG_PINCTRL_RK805=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_GENERIC_PLATFORM=y
++CONFIG_POWER_AVS=y
++CONFIG_ROCKCHIP_IODOMAIN=y
++CONFIG_POWER_RESET_GPIO=y
++CONFIG_POWER_RESET_GPIO_RESTART=y
++CONFIG_SYSCON_REBOOT_MODE=y
++CONFIG_BATTERY_SBS=y
++CONFIG_CHARGER_GPIO=y
++CONFIG_CHARGER_BQ24735=y
++CONFIG_BATTERY_RK817=y
++CONFIG_CHARGER_RK817=y
++CONFIG_SENSORS_PWM_FAN=y
++CONFIG_THERMAL=y
++CONFIG_THERMAL_WRITABLE_TRIPS=y
++CONFIG_THERMAL_GOV_FAIR_SHARE=y
++CONFIG_CPU_THERMAL=y
++CONFIG_ROCKCHIP_THERMAL=y
++CONFIG_WATCHDOG=y
++CONFIG_DW_WATCHDOG=y
++CONFIG_MFD_CROS_EC=y
++CONFIG_MFD_RK618=y
++CONFIG_MFD_RK628=y
++CONFIG_MFD_RK630_I2C=y
++CONFIG_MFD_RK808=y
++CONFIG_MFD_TPS6586X=y
++CONFIG_FUSB_30X=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_DEBUG=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ACT8865=y
++CONFIG_REGULATOR_FAN53555=y
++CONFIG_REGULATOR_GPIO=y
++CONFIG_REGULATOR_LP8752=y
++CONFIG_REGULATOR_MP8865=y
++CONFIG_REGULATOR_PWM=y
++CONFIG_REGULATOR_RK808=y
++CONFIG_REGULATOR_TPS65132=y
++CONFIG_REGULATOR_TPS6586X=y
++CONFIG_REGULATOR_XZ3216=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_CEC_SUPPORT=y
++CONFIG_MEDIA_CONTROLLER=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=y
++# CONFIG_USB_VIDEO_CLASS_INPUT_EVDEV is not set
++# CONFIG_USB_GSPCA is not set
++CONFIG_V4L_PLATFORM_DRIVERS=y
++CONFIG_SOC_CAMERA=y
++CONFIG_VIDEO_ROCKCHIP_CIF=y
++CONFIG_VIDEO_ROCKCHIP_ISP1=y
++CONFIG_VIDEO_ROCKCHIP_ISP=y
++CONFIG_V4L_MEM2MEM_DRIVERS=y
++CONFIG_VIDEO_ROCKCHIP_RGA=y
++# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
++CONFIG_VIDEO_TC35874X=y
++CONFIG_VIDEO_RK628_CSI=y
++CONFIG_VIDEO_LT6911UXC=y
++CONFIG_VIDEO_LT8619C=y
++CONFIG_VIDEO_IMX335=y
++CONFIG_VIDEO_IMX415=y
++CONFIG_VIDEO_OS04A10=y
++CONFIG_VIDEO_OV4689=y
++CONFIG_VIDEO_OV5695=y
++CONFIG_VIDEO_OV7251=y
++CONFIG_VIDEO_OV13850=y
++CONFIG_VIDEO_GC8034=y
++CONFIG_VIDEO_SC132GS=y
++# CONFIG_VGA_ARB is not set
++CONFIG_DRM=y
++CONFIG_DRM_IGNORE_IOTCL_PERMIT=y
++CONFIG_DRM_LOAD_EDID_FIRMWARE=y
++CONFIG_DRM_ROCKCHIP=y
++CONFIG_ROCKCHIP_ANALOGIX_DP=y
++CONFIG_ROCKCHIP_CDN_DP=y
++CONFIG_ROCKCHIP_DW_HDMI=y
++CONFIG_ROCKCHIP_DW_MIPI_DSI=y
++CONFIG_ROCKCHIP_INNO_HDMI=y
++CONFIG_ROCKCHIP_LVDS=y
++CONFIG_ROCKCHIP_DRM_TVE=y
++CONFIG_ROCKCHIP_RGB=y
++CONFIG_DRM_ROCKCHIP_RK618=y
++CONFIG_DRM_PANEL_SIMPLE=y
++CONFIG_DRM_RK630_TVE=y
++CONFIG_DRM_SII902X=y
++CONFIG_DRM_DW_HDMI_I2S_AUDIO=y
++CONFIG_DRM_DW_HDMI_CEC=y
++CONFIG_MALI400=y
++CONFIG_MALI450=y
++# CONFIG_MALI400_PROFILING is not set
++CONFIG_MALI_SHARED_INTERRUPTS=y
++CONFIG_MALI_DT=y
++CONFIG_MALI_DEVFREQ=y
++CONFIG_MALI_MIDGARD=y
++CONFIG_MALI_EXPERT=y
++CONFIG_MALI_PLATFORM_THIRDPARTY=y
++CONFIG_MALI_PLATFORM_THIRDPARTY_NAME="rk"
++CONFIG_MALI_DEBUG=y
++CONFIG_MALI_PWRSOFT_765=y
++CONFIG_MALI_BIFROST=y
++CONFIG_MALI_PLATFORM_NAME="rk"
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++# CONFIG_LCD_CLASS_DEVICE is not set
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_BACKLIGHT_PWM=y
++CONFIG_ROCKCHIP_RGA2=y
++CONFIG_ROCKCHIP_MPP_SERVICE=y
++CONFIG_ROCKCHIP_MPP_RKVDEC=y
++CONFIG_ROCKCHIP_MPP_RKVDEC2=y
++CONFIG_ROCKCHIP_MPP_RKVENC=y
++CONFIG_ROCKCHIP_MPP_VDPU1=y
++CONFIG_ROCKCHIP_MPP_VEPU1=y
++CONFIG_ROCKCHIP_MPP_VDPU2=y
++CONFIG_ROCKCHIP_MPP_VEPU2=y
++CONFIG_ROCKCHIP_MPP_IEP2=y
++CONFIG_ROCKCHIP_MPP_JPGDEC=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_HRTIMER=y
++CONFIG_SND_DYNAMIC_MINORS=y
++# CONFIG_SND_SUPPORT_OLD_API is not set
++CONFIG_SND_SEQUENCER=y
++CONFIG_SND_SEQ_DUMMY=y
++# CONFIG_SND_PCI is not set
++# CONFIG_SND_SPI is not set
++CONFIG_SND_USB_AUDIO=y
++CONFIG_SND_SOC=y
++CONFIG_SND_SOC_ROCKCHIP=y
++CONFIG_SND_SOC_ROCKCHIP_I2S_TDM=y
++CONFIG_SND_SOC_ROCKCHIP_PDM=y
++CONFIG_SND_SOC_ROCKCHIP_SPDIF=y
++CONFIG_SND_SOC_ROCKCHIP_MAX98090=y
++CONFIG_SND_SOC_ROCKCHIP_MULTICODECS=y
++CONFIG_SND_SOC_ROCKCHIP_RT5645=y
++CONFIG_SND_SOC_ROCKCHIP_RT5651_RK628=y
++CONFIG_SND_SOC_ROCKCHIP_HDMI=y
++CONFIG_SND_SOC_BT_SCO=y
++CONFIG_SND_SOC_DUMMY_CODEC=y
++CONFIG_SND_SOC_ES7202=y
++CONFIG_SND_SOC_ES7243E=y
++CONFIG_SND_SOC_ES8311=y
++CONFIG_SND_SOC_ES8316=y
++CONFIG_SND_SOC_RK3328=y
++CONFIG_SND_SOC_RK817=y
++CONFIG_SND_SOC_RK_CODEC_DIGITAL=y
++CONFIG_SND_SOC_RT5616=y
++CONFIG_SND_SOC_RT5640=y
++CONFIG_SND_SOC_SPDIF=y
++CONFIG_SND_SIMPLE_CARD=y
++CONFIG_HID_BATTERY_STRENGTH=y
++CONFIG_HIDRAW=y
++CONFIG_UHID=y
++CONFIG_HID_KENSINGTON=y
++CONFIG_HID_MULTITOUCH=y
++CONFIG_USB_HIDDEV=y
++CONFIG_I2C_HID=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++# CONFIG_USB_DEFAULT_PERSIST is not set
++CONFIG_USB_OTG=y
++CONFIG_USB_MON=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_ROOT_HUB_TT=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++# CONFIG_USB_OHCI_HCD_PCI is not set
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_ACM=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_UAS=y
++CONFIG_USB_DWC3=y
++CONFIG_USB_DWC2=y
++CONFIG_USB_SERIAL=y
++CONFIG_USB_SERIAL_GENERIC=y
++CONFIG_USB_SERIAL_CP210X=y
++CONFIG_USB_SERIAL_FTDI_SIO=y
++CONFIG_USB_SERIAL_KEYSPAN=y
++CONFIG_USB_SERIAL_PL2303=y
++CONFIG_USB_SERIAL_OTI6858=y
++CONFIG_USB_SERIAL_QUALCOMM=y
++CONFIG_USB_SERIAL_SIERRAWIRELESS=y
++CONFIG_USB_SERIAL_OPTION=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GADGET_DEBUG_FILES=y
++CONFIG_USB_GADGET_VBUS_DRAW=500
++CONFIG_USB_CONFIGFS=y
++CONFIG_USB_CONFIGFS_UEVENT=y
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
++CONFIG_USB_CONFIGFS_F_FS=y
++CONFIG_USB_CONFIGFS_F_UVC=y
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK_MINORS=32
++CONFIG_MMC_TEST=y
++CONFIG_SDIO_KEEPALIVE=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_OF_ARASAN=y
++CONFIG_MMC_SDHCI_OF_DWCMSHC=y
++CONFIG_MMC_DW=y
++CONFIG_MMC_DW_ROCKCHIP=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_IS31FL32XX=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_HYM8563=y
++CONFIG_RTC_DRV_RK808=y
++CONFIG_RTC_DRV_PCF8563=y
++CONFIG_DMADEVICES=y
++CONFIG_PL330_DMA=y
++CONFIG_STAGING=y
++CONFIG_FIQ_DEBUGGER=y
++CONFIG_FIQ_DEBUGGER_NO_SLEEP=y
++CONFIG_FIQ_DEBUGGER_CONSOLE=y
++CONFIG_FIQ_DEBUGGER_CONSOLE_DEFAULT_ENABLE=y
++CONFIG_FIQ_DEBUGGER_TRUST_ZONE=y
++CONFIG_RK_CONSOLE_THREAD=y
++CONFIG_COMMON_CLK_RK808=y
++CONFIG_COMMON_CLK_SCMI=y
++CONFIG_MAILBOX=y
++CONFIG_ROCKCHIP_IOMMU=y
++CONFIG_CPU_PX30=y
++CONFIG_CPU_RK1808=y
++CONFIG_CPU_RK3328=y
++CONFIG_CPU_RK3399=y
++CONFIG_CPU_RK3568=y
++CONFIG_ROCKCHIP_PM_DOMAINS=y
++CONFIG_ROCKCHIP_PVTM=y
++CONFIG_ROCKCHIP_SUSPEND_MODE=y
++CONFIG_ROCKCHIP_VENDOR_STORAGE_UPDATE_LOADER=y
++CONFIG_DEVFREQ_GOV_PERFORMANCE=y
++CONFIG_DEVFREQ_GOV_POWERSAVE=y
++CONFIG_DEVFREQ_GOV_USERSPACE=y
++CONFIG_ARM_ROCKCHIP_BUS_DEVFREQ=y
++CONFIG_ARM_ROCKCHIP_DMC_DEVFREQ=y
++CONFIG_ARM_ROCKCHIP_DMC_DEBUG=y
++CONFIG_DEVFREQ_EVENT_ROCKCHIP_NOCP=y
++CONFIG_MEMORY=y
++CONFIG_IIO=y
++CONFIG_IIO_BUFFER=y
++CONFIG_IIO_KFIFO_BUF=y
++CONFIG_IIO_TRIGGER=y
++CONFIG_ROCKCHIP_SARADC=y
++CONFIG_SENSORS_ISL29018=y
++CONFIG_SENSORS_TSL2563=y
++CONFIG_TSL2583=y
++CONFIG_IIO_SYSFS_TRIGGER=y
++CONFIG_PWM=y
++CONFIG_PWM_ROCKCHIP=y
++CONFIG_PHY_ROCKCHIP_CSI2_DPHY=y
++CONFIG_PHY_ROCKCHIP_DP=y
++CONFIG_PHY_ROCKCHIP_EMMC=y
++CONFIG_PHY_ROCKCHIP_INNO_HDMI_PHY=y
++CONFIG_PHY_ROCKCHIP_INNO_MIPI_DPHY=y
++CONFIG_PHY_ROCKCHIP_INNO_USB2=y
++CONFIG_PHY_ROCKCHIP_INNO_USB3=y
++CONFIG_PHY_ROCKCHIP_INNO_VIDEO_COMBO_PHY=y
++CONFIG_PHY_ROCKCHIP_NANENG_COMBO_PHY=y
++CONFIG_PHY_ROCKCHIP_NANENG_EDP=y
++CONFIG_PHY_ROCKCHIP_PCIE=y
++CONFIG_PHY_ROCKCHIP_SNPS_PCIE3=y
++CONFIG_PHY_ROCKCHIP_TYPEC=y
++CONFIG_PHY_ROCKCHIP_USB=y
++CONFIG_ANDROID=y
++CONFIG_ROCKCHIP_EFUSE=y
++CONFIG_ROCKCHIP_OTP=y
++CONFIG_TEE=y
++CONFIG_OPTEE=y
++CONFIG_RK_FLASH=y
++CONFIG_RK_SFC_NAND=y
++CONFIG_RK_SFC_NAND_MTD=y
++CONFIG_RK_SFC_NOR=y
++CONFIG_RK_SFC_NOR_MTD=y
++CONFIG_RK_HEADSET=y
++CONFIG_ROCKCHIP_RKNPU=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_XFS_FS=y
++# CONFIG_DNOTIFY is not set
++CONFIG_FUSE_FS=y
++CONFIG_ISO9660_FS=y
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_VFAT_FS=y
++CONFIG_FAT_DEFAULT_CODEPAGE=936
++CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
++CONFIG_NTFS_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_JFFS2_FS=y
++CONFIG_UBIFS_FS=y
++CONFIG_UBIFS_FS_ADVANCED_COMPR=y
++CONFIG_SQUASHFS=y
++CONFIG_PSTORE=y
++CONFIG_PSTORE_CONSOLE=y
++CONFIG_PSTORE_RAM=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_NFS_SWAP=y
++CONFIG_NLS_DEFAULT="utf8"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_936=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_UTF8=y
++CONFIG_UNICODE=y
++# CONFIG_CRYPTO_ECHAINIV is not set
++CONFIG_CRYPTO_SHA512=y
++CONFIG_CRYPTO_TWOFISH=y
++CONFIG_CRYPTO_ANSI_CPRNG=y
++CONFIG_CRYPTO_USER_API_HASH=y
++CONFIG_CRYPTO_USER_API_SKCIPHER=y
++CONFIG_CRYPTO_DEV_ROCKCHIP=y
++CONFIG_CRYPTO_DEV_ROCKCHIP_DEV=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC7=y
++# CONFIG_XZ_DEC_X86 is not set
++# CONFIG_XZ_DEC_POWERPC is not set
++# CONFIG_XZ_DEC_IA64 is not set
++# CONFIG_XZ_DEC_SPARC is not set
++CONFIG_PRINTK_TIME=y
++CONFIG_DYNAMIC_DEBUG=y
++CONFIG_DEBUG_INFO=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0
++CONFIG_SCHEDSTATS=y
++CONFIG_DEBUG_SPINLOCK=y
++CONFIG_DEBUG_CREDENTIALS=y
++CONFIG_RCU_CPU_STALL_TIMEOUT=60
++CONFIG_FUNCTION_TRACER=y
++CONFIG_BLK_DEV_IO_TRACE=y
++CONFIG_LKDTM=y
+diff --git a/drivers/media/i2c/sc132gs.c b/drivers/media/i2c/sc132gs.c
+index 5576d3630..bd8f6c164 100644
+--- a/drivers/media/i2c/sc132gs.c
++++ b/drivers/media/i2c/sc132gs.c
+@@ -1,134 +1,29 @@
+-// SPDX-License-Identifier: GPL-2.0
+ /*
+- * sc132gs driver
+- *
+- * Copyright (C) 2017 Fuzhou Rockchip Electronics Co., Ltd.
+- * V0.1.0: MIPI is ok.
+- * V0.0X01.0X02 fix mclk issue when probe multiple camera.
+- * V0.0X01.0X03 add enum_frame_interval function.
+- * V0.0X01.0X04 add quick stream on/off
+- * V0.0X01.0X05 add function g_mbus_config
++ * smartsens sc132gs driver
+  */
+-
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/i2c.h>
+ #include <linux/clk.h>
+-#include <linux/device.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+-#include <linux/i2c.h>
+-#include <linux/module.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/regulator/consumer.h>
+-#include <linux/sysfs.h>
+-#include <linux/slab.h>
+-#include <linux/version.h>
+-#include <linux/rk-camera-module.h>
+-#include <media/media-entity.h>
+-#include <media/v4l2-async.h>
+-#include <media/v4l2-ctrls.h>
+ #include <media/v4l2-subdev.h>
+-#include <linux/pinctrl/consumer.h>
+-
+-#define DRIVER_VERSION			KERNEL_VERSION(0, 0x01, 0x05)
+-#ifndef V4L2_CID_DIGITAL_GAIN
+-#define V4L2_CID_DIGITAL_GAIN		V4L2_CID_GAIN
+-#endif
+-
+-#define SC132GS_PIXEL_RATE		(72 * 1000 * 1000)
+-#define SC132GS_XVCLK_FREQ		24000000
+-
+-#define CHIP_ID				0x0132
+-#define SC132GS_REG_CHIP_ID		0x3107
+-
+-#define SC132GS_REG_CTRL_MODE		0x0100
+-#define SC132GS_MODE_SW_STANDBY		0x0
+-#define SC132GS_MODE_STREAMING		BIT(0)
+-
+-#define SC132GS_REG_EXPOSURE		0x3e01
+-#define	SC132GS_EXPOSURE_MIN		6
+-#define	SC132GS_EXPOSURE_STEP		1
+-#define SC132GS_VTS_MAX			0xffff
+-
+-#define SC132GS_REG_COARSE_AGAIN	0x3e08
+-#define SC132GS_REG_FINE_AGAIN		0x3e09
+-#define	ANALOG_GAIN_MIN			0x20
+-#define	ANALOG_GAIN_MAX			0x391
+-#define	ANALOG_GAIN_STEP		1
+-#define	ANALOG_GAIN_DEFAULT		0x20
+-
+-#define SC132GS_REG_TEST_PATTERN	0x4501
+-#define	SC132GS_TEST_PATTERN_ENABLE	0xcc
+-#define	SC132GS_TEST_PATTERN_DISABLE	0xc4
+-
+-#define SC132GS_REG_VTS			0x320e
+-
+-#define REG_NULL			0xFFFF
+-
+-#define SC132GS_REG_VALUE_08BIT		1
+-#define SC132GS_REG_VALUE_16BIT		2
+-#define SC132GS_REG_VALUE_24BIT		3
+-
+-#define SC132GS_NAME			"sc132gs"
+-
+-#define PIX_FORMAT MEDIA_BUS_FMT_Y8_1X8
+-
+-#define OF_CAMERA_PINCTRL_STATE_DEFAULT	"rockchip,camera_default"
+-#define OF_CAMERA_PINCTRL_STATE_SLEEP	"rockchip,camera_sleep"
+-
+-#define SC132GS_LANES			1
+-#define SC132GS_BITS_PER_SAMPLE		8
+-
+-static const char * const sc132gs_supply_names[] = {
+-	"avdd",		/* Analog power */
+-	"dovdd",	/* Digital I/O power */
+-	"dvdd",		/* Digital core power */
+-};
+-
+-#define SC132GS_NUM_SUPPLIES ARRAY_SIZE(sc132gs_supply_names)
++#include <media/v4l2-ctrls.h>
++#include <uapi/linux/rk-camera-module.h>
++#include <uapi/linux/rk-preisp.h>
++#include "sc132gs_ioctl.h"
+ 
+-struct regval {
+-	u16 addr;
+-	u8 val;
+-};
++#define SC132GS_REG_CHIP_ID			0x3107
++#define SC132GS_CHIP_ID				0x0132
+ 
+-struct sc132gs_mode {
+-	u32 width;
+-	u32 height;
+-	struct v4l2_fract max_fps;
+-	u32 hts_def;
+-	u32 vts_def;
+-	u32 exp_def;
+-	const struct regval *reg_list;
+-};
++#define REG_DELAY					0xFFFE
++#define REG_NULL					0xFFFF
+ 
+-struct sc132gs {
+-	struct i2c_client	*client;
+-	struct clk		*xvclk;
+-	struct gpio_desc	*pwdn_gpio;
+-	struct regulator_bulk_data supplies[SC132GS_NUM_SUPPLIES];
+-	struct pinctrl		*pinctrl;
+-	struct pinctrl_state	*pins_default;
+-	struct pinctrl_state	*pins_sleep;
+-	struct v4l2_subdev	subdev;
+-	struct media_pad	pad;
+-	struct v4l2_ctrl_handler ctrl_handler;
+-	struct v4l2_ctrl	*exposure;
+-	struct v4l2_ctrl	*anal_gain;
+-	struct v4l2_ctrl	*digi_gain;
+-	struct v4l2_ctrl	*hblank;
+-	struct v4l2_ctrl	*vblank;
+-	struct v4l2_ctrl	*test_pattern;
+-	struct mutex		mutex;
+-	bool			streaming;
+-	bool			power_on;
+-	const struct sc132gs_mode *cur_mode;
+-	u32			module_index;
+-	const char		*module_facing;
+-	const char		*module_name;
+-	const char		*len_name;
++struct reg_value {
++	u16 r;
++	u8 v;
+ };
+ 
+-#define to_sc132gs(sd) container_of(sd, struct sc132gs, subdev)
+-
+ /*
+  * Xclk 24Mhz
+  * Pclk 72Mhz
+@@ -136,11 +31,11 @@ struct sc132gs {
+  * framelength 2122(0x084a)
+  * grabwindow_width 1080
+  * grabwindow_height 1280
+- * mipi 1 lane
++ * mipi 2 lane
+  * max_framerate 30fps
+- * mipi_datarate per lane 720Mbps
++ * mipi_datarate per lane 360Mbps
+  */
+-static const struct regval sc132gs_global_regs[] = {
++static struct reg_value sc132gs_2lane_10bit_regs[] = {
+ 	{0x0103, 0x01},
+ 	{0x0100, 0x00},
+ 
+@@ -148,21 +43,21 @@ static const struct regval sc132gs_global_regs[] = {
+ 	{0x36e9, 0x80},
+ 	{0x36f9, 0x80},
+ 
+-	{0x3018, 0x12},
+-	{0x3019, 0x0e},
++	{0x3018, 0x32},
++	{0x3019, 0x0c},
+ 	{0x301a, 0xb4},
+-	{0x3031, 0x08},
++	{0x3031, 0x0a},
+ 	{0x3032, 0x60},
+ 	{0x3038, 0x44},
+ 	{0x3207, 0x17},
+-	{0x320c, 0x06},
+-	{0x320d, 0xa0},
+-	{0x320e, 0x08},
+-	{0x320f, 0x4a},
++	{0x320c, 0x05},
++	{0x320d, 0xdc},
++	{0x320e, 0x09},
++	{0x320f, 0x60},
+ 	{0x3250, 0xcc},
+ 	{0x3251, 0x02},
+-	{0x3252, 0x08},
+-	{0x3253, 0x45},
++	{0x3252, 0x09},
++	{0x3253, 0x5b},
+ 	{0x3254, 0x05},
+ 	{0x3255, 0x3b},
+ 	{0x3306, 0x78},
+@@ -197,7 +92,7 @@ static const struct regval sc132gs_global_regs[] = {
+ 	{0x363b, 0x48},
+ 	{0x363c, 0x83},
+ 	{0x363d, 0x10},
+-	{0x36ea, 0x3a},
++	{0x36ea, 0x38},
+ 	{0x36fa, 0x25},
+ 	{0x36fb, 0x05},
+ 	{0x36fd, 0x04},
+@@ -207,8 +102,8 @@ static const struct regval sc132gs_global_regs[] = {
+ 	{0x3904, 0x04},
+ 	{0x3908, 0x91},
+ 	{0x391e, 0x00},
+-	{0x3e01, 0x53},
+-	{0x3e02, 0xe0},
++	{0x3e01, 0x11},
++	{0x3e02, 0x20},
+ 	{0x3e09, 0x20},
+ 	{0x3e0e, 0xd2},
+ 	{0x3e14, 0xb0},
+@@ -216,7 +111,7 @@ static const struct regval sc132gs_global_regs[] = {
+ 	{0x3e26, 0x20},
+ 	{0x4418, 0x38},
+ 	{0x4503, 0x10},
+-	{0x4837, 0x14},
++	{0x4837, 0x21},
+ 	{0x5000, 0x0e},
+ 	{0x540c, 0x51},
+ 	{0x550f, 0x38},
+@@ -237,54 +132,141 @@ static const struct regval sc132gs_global_regs[] = {
+ 	{0x5795, 0x00},
+ 	{0x5799, 0x04},
+ 
+-	{0x3037, 0x00},
++	//flip
++	//{0x3221, (0x3 << 5)},
++
++	//mirror
++	// {0x3221, (0x3 << 1)},
++
++	//flip & mirror
++	//{0x3221, ((0x3 << 1)|(0x3 << 5))},
+ 
+ 	//PLL set
+-	{0x36e9, 0x24},
++	{0x36e9, 0x20},
+ 	{0x36f9, 0x24},
+ 
+-	{0x0100, 0x01},
+ 	{REG_NULL, 0x00},
+ };
+ 
+-static const struct sc132gs_mode supported_modes[] = {
++#define SC132GS_XVCLK_FREQ		24000000
++#define SC132GS_MAX_WIDTH		1080
++#define SC132GS_MAX_HEIGHT		1280
++
++#define SC132GS_Default_WIDTH	1080
++#define SC132GS_Default_HEIGHT	1280
++
++#define SC132GS_Reg_Reset		0x0103
++#define SC132GS_Reset_Value		0x01
++
++#define SC132GS_Reg_Sleep		0x0100
++#define SC132GS_Sleep_Disable	0x01
++#define SC132GS_Sleep_Enable	0x00
++
++struct sc132gs_mode {
++	int bus_fmt;
++	int width;
++	int height;
++	struct v4l2_fract fract;
++	struct reg_value *regset;
++};
++
++#define MIPI_FREQ_180M				180000000ULL
++#define PIXEL_RATE					(MIPI_FREQ_180M * 2 / 10 * 2)
++
++static const s64 link_freq_menu_items[] = {
++	MIPI_FREQ_180M,
++};
++
++static struct sc132gs_mode mode_init_list[] = {
+ 	{
+-		.width = 1080,
+-		.height = 1280,
+-		.max_fps = {
++		.bus_fmt = MEDIA_BUS_FMT_SGRBG10_1X10,
++		.width = SC132GS_Default_WIDTH,
++		.height = SC132GS_Default_HEIGHT,
++		.fract = {
+ 			.numerator = 10000,
+ 			.denominator = 300000,
+ 		},
+-		.exp_def = 0x0148,
+-		.hts_def = 0x06a0,
+-		.vts_def = 0x084a,
+-		.reg_list = sc132gs_global_regs,
++		.regset = sc132gs_2lane_10bit_regs,
+ 	},
+ };
+ 
+-static const char * const sc132gs_test_pattern_menu[] = {
+-	"Disabled",
+-	"Vertical Color Bar Type 1",
+-	"Vertical Color Bar Type 2",
+-	"Vertical Color Bar Type 3",
+-	"Vertical Color Bar Type 4"
+-};
++const int UsPerLine	= 26; // 37 = 1,000,000 / 30 / 1280;
++
++struct sc132gs
++{
++	struct i2c_client	*client;
++	struct clk			*xvclk;
++	struct gpio_desc	*reset_gpio;
++	struct gpio_desc	*poweroff_gpio;
++	struct mutex		mutex;
++	struct media_pad	pad;
++	struct v4l2_subdev	subdev;
++	struct v4l2_ctrl_handler	ctrl_handler;
+ 
+-#define SC132GS_LINK_FREQ_360MHZ	(360 * 1000 * 1000)
++	// v4l2 controls
++	struct v4l2_ctrl *link_freq;
++	struct v4l2_ctrl *pixel_rate;
+ 
+-static const s64 link_freq_menu_items[] = {
+-	SC132GS_LINK_FREQ_360MHZ
++	int mode;
++
++	struct sc132gs_mode mode_list[1];
++
++	unsigned int exposure_us;
++	unsigned int again;
++	unsigned int again_fine;
++	unsigned int dgain;
++	unsigned int dgain_fine;
+ };
+ 
+-/* Write registers up to 4 at a time */
+-static int sc132gs_write_reg(struct i2c_client *client,
+-	u16 reg, u32 len, u32 val)
++static int rd_reg(struct i2c_client *client, u16 reg, int len, u32 *val);
++static int wr_reg(struct i2c_client *client, u16 reg, int len, int val);
++
++#define SC132GS_DEBUG		0
++
++static void sc132gs_struct_init(struct sc132gs *sc132gs) {
++	sc132gs->mode_list[0] = mode_init_list[0];
++}
++
++static struct sc132gs_mode *get_sc132gs_mode(struct sc132gs *sc132gs)
++{
++	return &(sc132gs->mode_list[sc132gs->mode]);
++}
++
++static int rd_reg(struct i2c_client *client, u16 reg, int len, u32 *val)
++{
++	u16 addr = cpu_to_be16(reg);
++	u8 data[4] = {0};
++	struct i2c_msg msgs[2] = {
++		{
++			.addr = client->addr,
++			.flags = 0,
++			.len = 2,
++			.buf = (u8 *)&addr,
++		}, {
++			.addr = client->addr,
++			.flags = I2C_M_RD,
++			.len = len,
++			.buf = data + 4 - len,
++		},
++	};
++	int ret;
++
++	ret = i2c_transfer(client->adapter, msgs, 2);
++	if (ret != 2)
++		return -EIO;
++	
++	*val = be32_to_cpu(*(u32 *)data);
++	return 0;
++}
++
++static int wr_reg(struct i2c_client *client, u16 reg, int len, int val)
+ {
+ 	u32 buf_i, val_i;
+ 	u8 buf[6];
+ 	u8 *val_p;
+ 	__be32 val_be;
+-	u32 ret;
++	int len2;
++	int ret;
+ 
+ 	if (len > 4)
+ 		return -EINVAL;
+@@ -300,583 +282,477 @@ static int sc132gs_write_reg(struct i2c_client *client,
+ 	while (val_i < 4)
+ 		buf[buf_i++] = val_p[val_i++];
+ 
+-	ret = i2c_master_send(client, buf, len + 2);
+-	if (ret != len + 2)
++	len2 = len + 2;
++	ret = i2c_master_send(client, buf, len2);
++#if 0
++	dev_info(&client->dev, "i2c_master_send: reg 0x%04x, val 0x%04x, len2: %d, ret: %d\n",
++			reg, val, len2, ret);
++#endif
++	if (ret < len2)
+ 		return -EIO;
+ 
+ 	return 0;
+ }
+ 
+-static int sc132gs_write_array(struct i2c_client *client,
+-	const struct regval *regs)
+-{
+-	u32 i;
+-	int ret = 0;
+-
+-	for (i = 0; ret == 0 && regs[i].addr != REG_NULL; i++) {
+-		ret = sc132gs_write_reg(client, regs[i].addr,
+-					SC132GS_REG_VALUE_08BIT, regs[i].val);
+-	}
+-
+-	return ret;
+-}
+-
+-/* Read registers up to 4 at a time */
+-static int sc132gs_read_reg(struct i2c_client *client,
+-	u16 reg, unsigned int len, u32 *val)
++static int sc132gs_apply_exposure(struct sc132gs *sc132gs)
+ {
+-	struct i2c_msg msgs[2];
+-	u8 *data_be_p;
+-	__be32 data_be = 0;
+-	__be16 reg_addr_be = cpu_to_be16(reg);
+ 	int ret;
++	
++	/// Compute half_exp_lines;
++	int exp_steps = 16 * sc132gs->exposure_us / UsPerLine;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++#if 1
++	dev_info(dev, "sc132gs_apply_exposure: us:%d\n", sc132gs->exposure_us);
++#endif
+ 
+-	if (len > 4 || !len)
+-		return -EINVAL;
+-
+-	data_be_p = (u8 *)&data_be;
+-	/* Write register address */
+-	msgs[0].addr = client->addr;
+-	msgs[0].flags = 0;
+-	msgs[0].len = 2;
+-	msgs[0].buf = (u8 *)&reg_addr_be;
+-
+-	/* Read data from register */
+-	msgs[1].addr = client->addr;
+-	msgs[1].flags = I2C_M_RD;
+-	msgs[1].len = len;
+-	msgs[1].buf = &data_be_p[4 - len];
+-
+-	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+-	if (ret != ARRAY_SIZE(msgs))
+-		return -EIO;
+-
+-	*val = be32_to_cpu(data_be);
++	ret = wr_reg(client, SC132GS_REG_EXPOSURE_H, 1, SC132GS_FETCH_EXP_H(exp_steps));
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_exposure h failed");
++		return ret;
++	}
++	ret = wr_reg(client, SC132GS_REG_EXPOSURE_M, 1, SC132GS_FETCH_EXP_M(exp_steps));
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_exposure h failed");
++		return ret;
++	}
++	ret = wr_reg(client, SC132GS_REG_EXPOSURE_L, 1, SC132GS_FETCH_EXP_L(exp_steps));
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_exposure h failed");
++		return ret;
++	}
+ 
+ 	return 0;
+ }
+ 
+-static int sc132gs_get_reso_dist(const struct sc132gs_mode *mode,
+-	struct v4l2_mbus_framefmt *framefmt)
++static int sc132gs_apply_gain(struct sc132gs *sc132gs)
+ {
+-	return abs(mode->width - framefmt->width) +
+-	       abs(mode->height - framefmt->height);
+-}
++	int ret = 0;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++#if 1
++	dev_info(dev, "sc132gs_apply_gain: a:%d, af:%d, d:%d, df:%d\n",
++		sc132gs->again, sc132gs->again_fine, sc132gs->dgain, sc132gs->dgain_fine
++		);
++#endif
+ 
+-static const struct sc132gs_mode *
+-	sc132gs_find_best_fit(struct v4l2_subdev_format *fmt)
+-{
+-	struct v4l2_mbus_framefmt *framefmt = &fmt->format;
+-	int dist;
+-	int cur_best_fit = 0;
+-	int cur_best_fit_dist = -1;
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(supported_modes); i++) {
+-		dist = sc132gs_get_reso_dist(&supported_modes[i], framefmt);
+-		if (cur_best_fit_dist == -1 || dist < cur_best_fit_dist) {
+-			cur_best_fit_dist = dist;
+-			cur_best_fit = i;
+-		}
++	ret = wr_reg(client, SC132GS_REG_DIG_GAIN, 1, sc132gs->dgain);
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_gain dgain failed");
++		return ret;
++	}
++	ret = wr_reg(client, SC132GS_REG_DIG_FINE_GAIN, 1, sc132gs->dgain_fine);
++	
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_gain dgain_fine failed");
++		return ret;
++	}
++	ret = wr_reg(client, SC132GS_REG_ANA_GAIN, 1, sc132gs->again);
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_gain again failed");
++		return ret;
+ 	}
+-	return &supported_modes[cur_best_fit];
++	ret = wr_reg(client, SC132GS_REG_ANA_FINE_GAIN, 1, sc132gs->again_fine);
++	if(ret < 0) {
++		dev_info(dev, "sc132gs_apply_gain again_fine failed");
++		return ret;
++	}
++
++	return 0;
+ }
+ 
+-static int sc132gs_set_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
+-			  struct v4l2_subdev_format *fmt)
++static int sc132gs_check_sensor_id(struct i2c_client *client)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
+-	const struct sc132gs_mode *mode;
+-	s64 h_blank, vblank_def;
++	struct device *dev = &client->dev;
++	u32 id;
+ 
+-	mutex_lock(&sc132gs->mutex);
++	dev_info(dev, "read sensor id from i2c addr 0x%x, reg 0x%04x\n",
++			client->addr,
++			SC132GS_REG_CHIP_ID);
+ 
+-	mode = sc132gs_find_best_fit(fmt);
+-	fmt->format.code = PIX_FORMAT;
+-	fmt->format.width = mode->width;
+-	fmt->format.height = mode->height;
+-	fmt->format.field = V4L2_FIELD_NONE;
+-	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+-		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
+-#else
+-		mutex_unlock(&sc132gs->mutex);
+-		return -ENOTTY;
+-#endif
+-	} else {
+-		sc132gs->cur_mode = mode;
+-		h_blank = mode->hts_def - mode->width;
+-		__v4l2_ctrl_modify_range(sc132gs->hblank, h_blank,
+-					 h_blank, 1, h_blank);
+-		vblank_def = mode->vts_def - mode->height;
+-		__v4l2_ctrl_modify_range(sc132gs->vblank, vblank_def,
+-					 SC132GS_VTS_MAX - mode->height,
+-					 1, vblank_def);
++	if (rd_reg(client, SC132GS_REG_CHIP_ID, 2, &id) < 0) {
++		dev_err(dev, "i2c io error\n");
++		return -ENODEV;
+ 	}
+ 
+-	mutex_unlock(&sc132gs->mutex);
++	if (id != SC132GS_CHIP_ID) {
++		dev_err(dev, "not an sc132gs sensor, reg value of 0x%04x is 0x%04x\n",
++			SC132GS_REG_CHIP_ID, id);
++		return -ENODEV;
++	}
+ 
++	dev_info(dev, "found an smartsens sc132gs sensor, id 0x%04x\n", id);
+ 	return 0;
+ }
+ 
+-static int sc132gs_get_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_pad_config *cfg,
+-			  struct v4l2_subdev_format *fmt)
++static int sc132gs_start_streaming(struct sc132gs *sc132gs)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
+-	const struct sc132gs_mode *mode = sc132gs->cur_mode;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
++	int ret;
++	struct reg_value *reg = mode->regset;
+ 
+-	mutex_lock(&sc132gs->mutex);
+-	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+-#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+-		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+-#else
+-		mutex_unlock(&sc132gs->mutex);
+-		return -ENOTTY;
+-#endif
+-	} else {
+-		fmt->format.width = mode->width;
+-		fmt->format.height = mode->height;
+-		fmt->format.code = PIX_FORMAT;
+-		fmt->format.field = V4L2_FIELD_NONE;
++	ret = wr_reg(client, SC132GS_Reg_Reset, 1, SC132GS_Reset_Value);
++	if (ret < 0) {
++		dev_err(dev, "write mode select register to reset failed, ret %d\n", ret);
++		return ret;
+ 	}
+-	mutex_unlock(&sc132gs->mutex);
+ 
+-	return 0;
+-}
++	usleep_range(1500, 2000);
+ 
+-static int sc132gs_enum_mbus_code(struct v4l2_subdev *sd,
+-				 struct v4l2_subdev_pad_config *cfg,
+-				 struct v4l2_subdev_mbus_code_enum *code)
+-{
+-	if (code->index != 0)
+-		return -EINVAL;
+-	code->code = PIX_FORMAT;
++	while (reg->r) {
++		int v = reg->v;
++		ret = wr_reg(client, reg->r, 1, v);
++		if (ret < 0) {
++			dev_err(dev, "wr reg %d failed, ret %d\n", reg->r, ret);
++			return ret;
++		}
++		reg++;
++	}
++
++	sc132gs_apply_exposure(sc132gs);
++
++	ret = wr_reg(client, SC132GS_Reg_Sleep, 1, SC132GS_Sleep_Disable);
++	if (ret < 0) {
++		dev_err(dev, "write mode sleep disable failed, ret %d\n", ret);
++		return ret;
++	}
++
++	if (ret < 0) {
++		dev_err(dev, "write mode select register to streaming failed, ret %d\n", ret);
++		return ret;
++	}
+ 
+ 	return 0;
+ }
+ 
+-static int sc132gs_enum_frame_sizes(struct v4l2_subdev *sd,
+-				   struct v4l2_subdev_pad_config *cfg,
+-				   struct v4l2_subdev_frame_size_enum *fse)
++static int sc132gs_stop_streaming(struct sc132gs *sc132gs)
+ {
+-	if (fse->index >= ARRAY_SIZE(supported_modes))
+-		return -EINVAL;
+-
+-	if (fse->code != PIX_FORMAT)
+-		return -EINVAL;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	int ret;
+ 
+-	fse->min_width = supported_modes[fse->index].width;
+-	fse->max_width = supported_modes[fse->index].width;
+-	fse->max_height = supported_modes[fse->index].height;
+-	fse->min_height = supported_modes[fse->index].height;
++	ret = wr_reg(client, SC132GS_Reg_Sleep, 1, SC132GS_Sleep_Enable);
++	if (ret < 0) {
++		dev_err(dev, "write mode select register to reset failed, ret %d\n", ret);
++		return ret;
++	}
+ 
+ 	return 0;
+ }
+ 
+-static int sc132gs_enable_test_pattern(struct sc132gs *sc132gs, u32 pattern)
++static void sc132gs_enable_clk(struct sc132gs *sc132gs)
+ {
+-	u32 val;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	int ret;
++
++	ret = clk_set_rate(sc132gs->xvclk, SC132GS_XVCLK_FREQ);
++	if (ret < 0)
++		dev_warn(dev, "failed to set xvclk rate, ret %d\n", ret);
+ 
+-	if (pattern)
+-		val = (pattern - 1) | SC132GS_TEST_PATTERN_ENABLE;
+-	else
+-		val = SC132GS_TEST_PATTERN_DISABLE;
++	if (clk_get_rate(sc132gs->xvclk) != SC132GS_XVCLK_FREQ)
++		dev_warn(dev, "xvclk mismatched\n");
+ 
+-	return sc132gs_write_reg(sc132gs->client, SC132GS_REG_TEST_PATTERN,
+-				 SC132GS_REG_VALUE_08BIT, val);
++	ret = clk_prepare_enable(sc132gs->xvclk);
++	if (ret < 0)
++		dev_err(dev, "failed to enable xvclk\n");
++
++	usleep_range(20*1000, 30*1000);
+ }
+ 
+-static void sc132gs_get_module_inf(struct sc132gs *sc132gs,
+-				   struct rkmodule_inf *inf)
++static void sc132gs_disable_clk(struct sc132gs *sc132gs)
+ {
+-	memset(inf, 0, sizeof(*inf));
+-	strlcpy(inf->base.sensor, SC132GS_NAME, sizeof(inf->base.sensor));
+-	strlcpy(inf->base.module, sc132gs->module_name,
+-		sizeof(inf->base.module));
+-	strlcpy(inf->base.lens, sc132gs->len_name, sizeof(inf->base.lens));
++	clk_disable_unprepare(sc132gs->xvclk);
+ }
+ 
+ static long sc132gs_ioctl(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
+-	long ret = 0;
+-	u32 stream = 0;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++
++#if SC132GS_DEBUG
++	dev_info(dev, "sc132gs ioctl, cmd %u (%s)\n", cmd, cmd_str(cmd));
++#endif
+ 
+ 	switch (cmd) {
+ 	case RKMODULE_GET_MODULE_INFO:
+-		sc132gs_get_module_inf(sc132gs, (struct rkmodule_inf *)arg);
++		{
++			struct rkmodule_inf *inf = (struct rkmodule_inf *)arg;
++			memset(inf, 0, sizeof(struct rkmodule_inf));
++			strcpy(inf->base.sensor, "sc132gs");
++			strcpy(inf->base.module, "sc132gs-module");
++			strcpy(inf->base.lens, "sc132gs-lens");
++		}
+ 		break;
+-	case RKMODULE_SET_QUICK_STREAM:
+-
+-		stream = *((u32 *)arg);
+-
+-		if (stream)
+-			ret = sc132gs_write_reg(sc132gs->client, SC132GS_REG_CTRL_MODE,
+-				SC132GS_REG_VALUE_08BIT, SC132GS_MODE_STREAMING);
+-		else
+-			ret = sc132gs_write_reg(sc132gs->client, SC132GS_REG_CTRL_MODE,
+-				SC132GS_REG_VALUE_08BIT, SC132GS_MODE_SW_STANDBY);
++	case RKMODULE_GET_HDR_CFG:
++		{
++			struct rkmodule_hdr_cfg *hdr;
++			hdr = (struct rkmodule_hdr_cfg *)arg;
++			hdr->esp.mode = HDR_NORMAL_VC;
++			hdr->hdr_mode = NO_HDR;
++		}
+ 		break;
+-	default:
+-		ret = -ENOIOCTLCMD;
++	case SC132GS_IO_Set_Exposure:
++		{
++			struct sc132gs_exposure_t *exp_t;
++			exp_t = (struct sc132gs_exposure_t *)arg;
++			sc132gs->exposure_us = exp_t->exposure_us;
++			sc132gs_apply_exposure(sc132gs);
++		}
+ 		break;
+-	}
+-
+-	return ret;
+-}
+-
+-#ifdef CONFIG_COMPAT
+-static long sc132gs_compat_ioctl32(struct v4l2_subdev *sd,
+-				   unsigned int cmd, unsigned long arg)
+-{
+-	void __user *up = compat_ptr(arg);
+-	struct rkmodule_inf *inf;
+-	long ret;
+-	u32 stream = 0;
+-
+-	switch (cmd) {
+-	case RKMODULE_GET_MODULE_INFO:
+-		inf = kzalloc(sizeof(*inf), GFP_KERNEL);
+-		if (!inf) {
+-			ret = -ENOMEM;
+-			return ret;
++	case SC132GS_IO_Get_Exposure:
++		{
++			struct sc132gs_exposure_t *exp_t;
++			exp_t = (struct sc132gs_exposure_t *)arg;
++			exp_t->exposure_us = sc132gs->exposure_us;
+ 		}
++		break;
+ 
+-		ret = sc132gs_ioctl(sd, cmd, inf);
+-		if (!ret)
+-			ret = copy_to_user(up, inf, sizeof(*inf));
+-		kfree(inf);
++	case SC132GS_IO_Set_Gain:
++		{
++			struct sc132gs_gain_t *gain;
++			gain = (struct sc132gs_gain_t *)arg;
++			sc132gs->again = gain->again;
++			sc132gs->again_fine = gain->again_fine;
++			sc132gs->dgain = gain->dgain;
++			sc132gs->dgain_fine = gain->dgain_fine;
++			sc132gs_apply_gain(sc132gs);
++		}
+ 		break;
+-	case RKMODULE_SET_QUICK_STREAM:
+-		ret = copy_from_user(&stream, up, sizeof(u32));
+-		if (!ret)
+-			ret = sc132gs_ioctl(sd, cmd, &stream);
++	case SC132GS_IO_Get_Gain:
++		{
++			struct sc132gs_gain_t *gain;
++			gain = (struct sc132gs_gain_t *)arg;
++			gain->again = sc132gs->again;
++			gain->again_fine = sc132gs->again_fine;
++			gain->dgain = sc132gs->dgain;
++			gain->dgain_fine = sc132gs->dgain_fine;
++		}
+ 		break;
++
+ 	default:
+-		ret = -ENOIOCTLCMD;
+-		break;
++		dev_err(dev, "ioctl not impl\n");
++		return -ENOIOCTLCMD;
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+-#endif
+ 
+-static int sc132gs_set_ctrl_gain(struct sc132gs *sc132gs, u32 a_gain)
++#ifdef CONFIG_COMPAT
++static long sc132gs_compat_ioctl32(struct v4l2_subdev *sd, unsigned int cmd, unsigned long arg)
+ {
+-	int ret = 0;
+-	u32 coarse_again, fine_again, fine_again_reg, coarse_again_reg;
+-
+-	if (a_gain < 0x20)
+-		a_gain = 0x20;
+-	if (a_gain > 0x391)
+-		a_gain = 0x391;
+-
+-	if (a_gain < 0x3a) {/*1x~1.813*/
+-		fine_again = a_gain;
+-		coarse_again = 0x03;
+-		fine_again_reg = fine_again & 0x3f;
+-		coarse_again_reg = coarse_again & 0x3F;
+-		if (fine_again_reg >= 0x39)
+-			fine_again_reg = 0x39;
+-	} else if (a_gain < 0x72) {/*1.813~3.568x*/
+-		fine_again = (a_gain - 0x3a) * 1000 / 1755 + 0x20;
+-		coarse_again = 0x23;
+-		if (fine_again > 0x3f)
+-			fine_again = 0x3f;
+-		fine_again_reg = fine_again & 0x3f;
+-		coarse_again_reg = coarse_again & 0x3F;
+-	} else if (a_gain < 0xe8) { /*3.568x~7.250x*/
+-		fine_again = (a_gain - 0x72) * 1000 / 3682 + 0x20;
+-		coarse_again = 0x27;
+-		if (fine_again > 0x3f)
+-			fine_again = 0x3f;
+-		fine_again_reg = fine_again & 0x3f;
+-		coarse_again_reg = coarse_again & 0x3F;
+-	} else if (a_gain < 0x1d0) { /*7.250x~14.5x*/
+-		fine_again = (a_gain - 0xe8) * 100 / 725 + 0x20;
+-		coarse_again = 0x2f;
+-		if (fine_again > 0x3f)
+-			fine_again = 0x3f;
+-		fine_again_reg = fine_again & 0x3f;
+-		coarse_again_reg = coarse_again & 0x3F;
+-	} else { /*14.5x~28.547*/
+-		fine_again = (a_gain - 0x1d0) * 1000 / 14047 + 0x20;
+-		coarse_again = 0x3f;
+-		if (fine_again > 0x3f)
+-			fine_again = 0x3f;
+-		fine_again_reg = fine_again & 0x3f;
+-		coarse_again_reg = coarse_again & 0x3F;
+-	}
+-	ret |= sc132gs_write_reg(sc132gs->client,
+-		SC132GS_REG_COARSE_AGAIN,
+-		SC132GS_REG_VALUE_08BIT,
+-		coarse_again_reg);
+-	ret |= sc132gs_write_reg(sc132gs->client,
+-		SC132GS_REG_FINE_AGAIN,
+-		SC132GS_REG_VALUE_08BIT,
+-		fine_again_reg);
+-	return ret;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++
++	dev_info(dev, "sc132gs compat ioctl, cmd %u (%s)\n", cmd, cmd_str(cmd));
++	return -ENOIOCTLCMD;
+ }
++#endif
+ 
+-static int __sc132gs_start_stream(struct sc132gs *sc132gs)
++static int sc132gs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ {
+-	int ret;
+-
+-	ret = sc132gs_write_array(sc132gs->client, sc132gs->cur_mode->reg_list);
+-	if (ret)
+-		return ret;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
++	struct v4l2_mbus_framefmt *fmt = v4l2_subdev_get_try_format(sd, fh->pad, 0);
+ 
+-	/* In case these controls are set before streaming */
+-	mutex_unlock(&sc132gs->mutex);
+-	ret = v4l2_ctrl_handler_setup(&sc132gs->ctrl_handler);
+-	mutex_lock(&sc132gs->mutex);
+-	if (ret)
+-		return ret;
++	dev_info(dev, "sc132gs open\n");
+ 
+-	return sc132gs_write_reg(sc132gs->client, SC132GS_REG_CTRL_MODE,
+-			SC132GS_REG_VALUE_08BIT, SC132GS_MODE_STREAMING);
++	fmt->width = mode->width;
++	fmt->height = mode->height;
++	fmt->code = mode->bus_fmt;
++	fmt->field = V4L2_FIELD_NONE;
++	return 0;
+ }
+ 
+-static int __sc132gs_stop_stream(struct sc132gs *sc132gs)
++static int sc132gs_set_ctrl(struct v4l2_ctrl *ctrl)
+ {
+-	return sc132gs_write_reg(sc132gs->client, SC132GS_REG_CTRL_MODE,
+-			SC132GS_REG_VALUE_08BIT, SC132GS_MODE_SW_STANDBY);
++	struct sc132gs *sc132gs = container_of(ctrl->handler, struct sc132gs, ctrl_handler);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++
++	dev_info(dev, "sc132gs set ctrl id %d, not supported\n", ctrl->id);
++	return -EOPNOTSUPP;
+ }
+ 
+-static int sc132gs_s_stream(struct v4l2_subdev *sd, int on)
++static int sc132gs_set_stream(struct v4l2_subdev *sd, int on)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
+ 	struct i2c_client *client = sc132gs->client;
+-	int ret = 0;
++	struct device *dev = &client->dev;
++	int ret;
+ 
+-	mutex_lock(&sc132gs->mutex);
+-	on = !!on;
+-	if (on == sc132gs->streaming)
+-		goto unlock_and_return;
++	dev_info(dev, "sc132gs set stream on %d\n", on);
+ 
+ 	if (on) {
+-		ret = pm_runtime_get_sync(&client->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&client->dev);
+-			goto unlock_and_return;
+-		}
+-
+-		ret = __sc132gs_start_stream(sc132gs);
+-		if (ret) {
+-			v4l2_err(sd, "start stream failed while write regs\n");
+-			pm_runtime_put(&client->dev);
+-			goto unlock_and_return;
+-		}
+-	} else {
+-		__sc132gs_stop_stream(sc132gs);
+-		pm_runtime_put(&client->dev);
++		sc132gs_enable_clk(sc132gs);
++		ret = sc132gs_start_streaming(sc132gs);
++	}
++	else {
++		ret = sc132gs_stop_streaming(sc132gs);
++		sc132gs_disable_clk(sc132gs);
+ 	}
+-
+-	sc132gs->streaming = on;
+-
+-unlock_and_return:
+-	mutex_unlock(&sc132gs->mutex);
+ 
+ 	return ret;
+ }
+ 
+-static int sc132gs_s_power(struct v4l2_subdev *sd, int on)
++static int sc132gs_get_frame_interval(struct v4l2_subdev *sd, struct v4l2_subdev_frame_interval *fi)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
+ 	struct i2c_client *client = sc132gs->client;
+-	int ret = 0;
+-
+-	mutex_lock(&sc132gs->mutex);
+-
+-	/* If the power state is not modified - no work to do. */
+-	if (sc132gs->power_on == !!on)
+-		goto unlock_and_return;
+-
+-	if (on) {
+-		ret = pm_runtime_get_sync(&client->dev);
+-		if (ret < 0) {
+-			pm_runtime_put_noidle(&client->dev);
+-			goto unlock_and_return;
+-		}
+-		sc132gs->power_on = true;
+-	} else {
+-		pm_runtime_put(&client->dev);
+-		sc132gs->power_on = false;
+-	}
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
+ 
+-unlock_and_return:
+-	mutex_unlock(&sc132gs->mutex);
++	dev_info(dev, "sc132gs get frame interval\n");
+ 
+-	return ret;
++	fi->interval = mode->fract;
++	return 0;
+ }
+ 
+-static int sc132gs_g_frame_interval(struct v4l2_subdev *sd,
+-				    struct v4l2_subdev_frame_interval *fi)
++static int sc132gs_get_mbus_config(struct v4l2_subdev *sd, struct v4l2_mbus_config *config)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
+-	const struct sc132gs_mode *mode = sc132gs->cur_mode;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
+ 
+-	mutex_lock(&sc132gs->mutex);
+-	fi->interval = mode->max_fps;
+-	mutex_unlock(&sc132gs->mutex);
++	dev_info(dev, "sc132gs get mbus config\n");
+ 
++	config->type = V4L2_MBUS_CSI2;
++	config->flags = V4L2_MBUS_CSI2_2_LANE | V4L2_MBUS_CSI2_CHANNEL_0 | V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
+ 	return 0;
+ }
+ 
+-/* Calculate the delay in us by clock rate and clock cycles */
+-static inline u32 sc132gs_cal_delay(u32 cycles)
+-{
+-	return DIV_ROUND_UP(cycles, SC132GS_XVCLK_FREQ / 1000 / 1000);
+-}
+-
+-static int __sc132gs_power_on(struct sc132gs *sc132gs)
++static int sc132gs_enum_mbus_code(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	int ret;
+-	u32 delay_us;
+-	struct device *dev = &sc132gs->client->dev;
+-
+-	if (!IS_ERR_OR_NULL(sc132gs->pins_default)) {
+-		ret = pinctrl_select_state(sc132gs->pinctrl,
+-					   sc132gs->pins_default);
+-		if (ret < 0)
+-			dev_err(dev, "could not set pins\n");
+-	}
+-
+-	ret = clk_set_rate(sc132gs->xvclk, SC132GS_XVCLK_FREQ);
+-	if (ret < 0)
+-		dev_warn(dev, "Failed to set xvclk rate (24MHz)\n");
+-	if (clk_get_rate(sc132gs->xvclk) != SC132GS_XVCLK_FREQ)
+-		dev_warn(dev, "xvclk mismatched, modes are based on 24MHz\n");
+-	ret = clk_prepare_enable(sc132gs->xvclk);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to enable xvclk\n");
+-		return ret;
+-	}
+-
+-	ret = regulator_bulk_enable(SC132GS_NUM_SUPPLIES, sc132gs->supplies);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to enable regulators\n");
+-		goto disable_clk;
+-	}
+-
+-	if (!IS_ERR(sc132gs->pwdn_gpio))
+-		gpiod_set_value_cansleep(sc132gs->pwdn_gpio, 1);
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
+ 
+-	/* 8192 cycles prior to first SCCB transaction */
+-	delay_us = sc132gs_cal_delay(8192);
+-	usleep_range(delay_us, delay_us * 2);
++	dev_info(dev, "sc132gs enum mbus code, index %d\n", code->index);
+ 
++	code->code = mode->bus_fmt;
+ 	return 0;
+-
+-disable_clk:
+-	clk_disable_unprepare(sc132gs->xvclk);
+-
+-	return ret;
+ }
+ 
+-static void __sc132gs_power_off(struct sc132gs *sc132gs)
++static int sc132gs_enum_frame_sizes(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	int ret;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
+ 
+-	if (!IS_ERR(sc132gs->pwdn_gpio))
+-		gpiod_set_value_cansleep(sc132gs->pwdn_gpio, 0);
+-	clk_disable_unprepare(sc132gs->xvclk);
+-	if (!IS_ERR_OR_NULL(sc132gs->pins_sleep)) {
+-		ret = pinctrl_select_state(sc132gs->pinctrl,
+-					   sc132gs->pins_sleep);
+-		if (ret < 0)
+-			dev_dbg(&sc132gs->client->dev, "could not set pins\n");
+-	}
+-	regulator_bulk_disable(SC132GS_NUM_SUPPLIES, sc132gs->supplies);
+-}
++	dev_info(dev, "sc132gs enum frame sizes, index %d code %d\n", fse->index, fse->code);
+ 
+-static int sc132gs_runtime_resume(struct device *dev)
+-{
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
++	if (fse->code != mode->bus_fmt) {
++		dev_err(dev, "invalid code, no match mode's code\n");
++		return -EINVAL;
++	}
+ 
+-	return __sc132gs_power_on(sc132gs);
++	fse->min_width = fse->max_width = mode->width;
++	fse->min_height = fse->max_height = mode->height;
++	return 0;
+ }
+ 
+-static int sc132gs_runtime_suspend(struct device *dev)
++static int sc132gs_enum_frame_interval(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_frame_interval_enum *fie)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
++
++	dev_info(dev, "sc132gs enum frame interval, idx %d\n", fie->index);
+ 
+-	__sc132gs_power_off(sc132gs);
++	if (fie->index > 0)
++		return -EINVAL;
+ 
++	fie->code = mode->bus_fmt;
++	fie->width = mode->width;
++	fie->height = mode->height;
++	fie->interval = mode->fract;
++	fie->reserved[0] = NO_HDR;
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+-static int sc132gs_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
++static int sc132gs_get_fmt(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_format *fmt)
+ {
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
+-	struct v4l2_mbus_framefmt *try_fmt =
+-				v4l2_subdev_get_try_format(sd, fh->pad, 0);
+-	const struct sc132gs_mode *def_mode = &supported_modes[0];
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
++
++	dev_info(dev, "sc132gs get fmt, which %u pad %u\n", fmt->which, fmt->pad);
+ 
+ 	mutex_lock(&sc132gs->mutex);
+-	/* Initialize try_fmt */
+-	try_fmt->width = def_mode->width;
+-	try_fmt->height = def_mode->height;
+-	try_fmt->code = PIX_FORMAT;
+-	try_fmt->field = V4L2_FIELD_NONE;
+ 
++	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
++		fmt->format = *v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
++	} else {
++		fmt->format.width = mode->width;
++		fmt->format.height = mode->height;
++		fmt->format.code = mode->bus_fmt;
++		fmt->format.field = V4L2_FIELD_NONE;
++		fmt->format.colorspace = V4L2_COLORSPACE_SRGB;
++		fmt->reserved[0] = 0;
++	}
+ 	mutex_unlock(&sc132gs->mutex);
+-	/* No crop or compose */
+ 
+ 	return 0;
+ }
+-#endif
+ 
+-static int sc132gs_enum_frame_interval(struct v4l2_subdev *sd,
+-				      struct v4l2_subdev_pad_config *cfg,
+-				      struct v4l2_subdev_frame_interval_enum *fie)
++static int sc132gs_set_fmt(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_format *fmt)
+ {
+-	if (fie->index >= ARRAY_SIZE(supported_modes))
+-		return -EINVAL;
+-
+-	if (fie->code != PIX_FORMAT)
+-		return -EINVAL;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
+ 
+-	fie->width = supported_modes[fie->index].width;
+-	fie->height = supported_modes[fie->index].height;
+-	fie->interval = supported_modes[fie->index].max_fps;
+-	return 0;
++	dev_info(dev, "sc132gs set fmt not supported\n");
++	return -EOPNOTSUPP;
+ }
+ 
+-static int sc132gs_g_mbus_config(struct v4l2_subdev *sd,
+-				struct v4l2_mbus_config *config)
++static int sc132gs_get_selection(struct v4l2_subdev *sd,
++		struct v4l2_subdev_pad_config *cfg,
++		struct v4l2_subdev_selection *sel)
+ {
+-	u32 val = 0;
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
++	struct sc132gs_mode *mode = get_sc132gs_mode(sc132gs);
+ 
+-	val = 1 << (SC132GS_LANES - 1) |
+-	      V4L2_MBUS_CSI2_CHANNEL_0 |
+-	      V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
+-	config->type = V4L2_MBUS_CSI2;
+-	config->flags = val;
++	dev_info(dev, "sc132gs get selection target %d\n", sel->target);
+ 
+-	return 0;
+-}
++	if (sel->target == V4L2_SEL_TGT_CROP_BOUNDS) {
++		sel->r.left = 0;
++		sel->r.width = mode->width;
++		sel->r.top = 0;
++		sel->r.height = mode->height;
++		return 0;
++	}
+ 
+-static const struct dev_pm_ops sc132gs_pm_ops = {
+-	SET_RUNTIME_PM_OPS(sc132gs_runtime_suspend,
+-			   sc132gs_runtime_resume, NULL)
+-};
++	dev_err(dev, "get sel not supported\n");
++	return -EINVAL;
++}
+ 
+-#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+ static const struct v4l2_subdev_internal_ops sc132gs_internal_ops = {
+ 	.open = sc132gs_open,
+ };
+-#endif
+ 
+ static const struct v4l2_subdev_core_ops sc132gs_core_ops = {
+-	.s_power = sc132gs_s_power,
+ 	.ioctl = sc132gs_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl32 = sc132gs_compat_ioctl32,
+@@ -884,9 +760,9 @@ static const struct v4l2_subdev_core_ops sc132gs_core_ops = {
+ };
+ 
+ static const struct v4l2_subdev_video_ops sc132gs_video_ops = {
+-	.s_stream = sc132gs_s_stream,
+-	.g_frame_interval = sc132gs_g_frame_interval,
+-	.g_mbus_config = sc132gs_g_mbus_config,
++	.s_stream = sc132gs_set_stream,
++	.g_frame_interval = sc132gs_get_frame_interval,
++	.g_mbus_config = sc132gs_get_mbus_config,
+ };
+ 
+ static const struct v4l2_subdev_pad_ops sc132gs_pad_ops = {
+@@ -895,6 +771,7 @@ static const struct v4l2_subdev_pad_ops sc132gs_pad_ops = {
+ 	.enum_frame_interval = sc132gs_enum_frame_interval,
+ 	.get_fmt = sc132gs_get_fmt,
+ 	.set_fmt = sc132gs_set_fmt,
++	.get_selection = sc132gs_get_selection,
+ };
+ 
+ static const struct v4l2_subdev_ops sc132gs_subdev_ops = {
+@@ -903,315 +780,166 @@ static const struct v4l2_subdev_ops sc132gs_subdev_ops = {
+ 	.pad	= &sc132gs_pad_ops,
+ };
+ 
+-static int sc132gs_set_ctrl(struct v4l2_ctrl *ctrl)
+-{
+-	struct sc132gs *sc132gs = container_of(ctrl->handler,
+-					       struct sc132gs, ctrl_handler);
+-	struct i2c_client *client = sc132gs->client;
+-	s64 max;
+-	int ret = 0;
+-
+-	/* Propagate change of current control to all related controls */
+-	switch (ctrl->id) {
+-	case V4L2_CID_VBLANK:
+-		/* Update max exposure while meeting expected vblanking */
+-		max = sc132gs->cur_mode->height + ctrl->val - 6;
+-		__v4l2_ctrl_modify_range(sc132gs->exposure,
+-					 sc132gs->exposure->minimum, max,
+-					 sc132gs->exposure->step,
+-					 sc132gs->exposure->default_value);
+-		break;
+-	}
+-
+-	if (!pm_runtime_get_if_in_use(&client->dev))
+-		return 0;
+-
+-	switch (ctrl->id) {
+-	case V4L2_CID_EXPOSURE:
+-		/* 4 least significant bits of expsoure are fractional part */
+-		ret = sc132gs_write_reg(sc132gs->client, SC132GS_REG_EXPOSURE,
+-			SC132GS_REG_VALUE_16BIT, ctrl->val << 4);
+-		break;
+-	case V4L2_CID_ANALOGUE_GAIN:
+-		ret = sc132gs_set_ctrl_gain(sc132gs, ctrl->val);
+-		break;
+-	case V4L2_CID_VBLANK:
+-		ret = sc132gs_write_reg(sc132gs->client, SC132GS_REG_VTS,
+-					SC132GS_REG_VALUE_16BIT,
+-					ctrl->val + sc132gs->cur_mode->height);
+-		break;
+-	case V4L2_CID_TEST_PATTERN:
+-		ret = sc132gs_enable_test_pattern(sc132gs, ctrl->val);
+-		break;
+-	default:
+-		dev_warn(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
+-			 __func__, ctrl->id, ctrl->val);
+-		break;
+-	}
+-
+-	pm_runtime_put(&client->dev);
+-
+-	return ret;
+-}
+-
+ static const struct v4l2_ctrl_ops sc132gs_ctrl_ops = {
+ 	.s_ctrl = sc132gs_set_ctrl,
+ };
+ 
+-static int sc132gs_initialize_controls(struct sc132gs *sc132gs)
++static int sc132gs_init_controls(struct sc132gs *sc132gs)
+ {
+-	const struct sc132gs_mode *mode;
+-	struct v4l2_ctrl_handler *handler;
+-	struct v4l2_ctrl *ctrl;
+-	s64 exposure_max, vblank_def;
+-	u32 h_blank;
++	// struct v4l2_subdev *sd = &sc132gs->subdev;
++	struct v4l2_ctrl_handler *handler = &sc132gs->ctrl_handler;
++	struct i2c_client *client = sc132gs->client;
++	struct device *dev = &client->dev;
+ 	int ret;
+ 
+-	handler = &sc132gs->ctrl_handler;
+-	mode = sc132gs->cur_mode;
+-	ret = v4l2_ctrl_handler_init(handler, 8);
+-	if (ret)
++	u32 link_freq_size;
++
++	ret = v4l2_ctrl_handler_init(handler, 5);
++	if (ret) {
++		dev_err(dev, "v4l2_ctrl_handler_init() failed, ret %d\n", ret);
+ 		return ret;
+-	handler->lock = &sc132gs->mutex;
+-
+-	ctrl = v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ,
+-				      0, 0, link_freq_menu_items);
+-	if (ctrl)
+-		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+-
+-	v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE,
+-			  0, SC132GS_PIXEL_RATE, 1, SC132GS_PIXEL_RATE);
+-
+-	h_blank = mode->hts_def - mode->width;
+-	sc132gs->hblank = v4l2_ctrl_new_std(handler, NULL, V4L2_CID_HBLANK,
+-				h_blank, h_blank, 1, h_blank);
+-	if (sc132gs->hblank)
+-		sc132gs->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+-
+-	vblank_def = mode->vts_def - mode->height;
+-	sc132gs->vblank = v4l2_ctrl_new_std(handler, &sc132gs_ctrl_ops,
+-				V4L2_CID_VBLANK, vblank_def,
+-				SC132GS_VTS_MAX - mode->height,
+-				1, vblank_def);
+-
+-	exposure_max = mode->vts_def - 6;
+-	sc132gs->exposure = v4l2_ctrl_new_std(handler, &sc132gs_ctrl_ops,
+-				V4L2_CID_EXPOSURE, SC132GS_EXPOSURE_MIN,
+-				exposure_max, SC132GS_EXPOSURE_STEP,
+-				mode->exp_def);
+-
+-	sc132gs->anal_gain = v4l2_ctrl_new_std(handler, &sc132gs_ctrl_ops,
+-				V4L2_CID_ANALOGUE_GAIN, ANALOG_GAIN_MIN,
+-				ANALOG_GAIN_MAX, ANALOG_GAIN_STEP,
+-				ANALOG_GAIN_DEFAULT);
+-
+-	sc132gs->test_pattern = v4l2_ctrl_new_std_menu_items(handler,
+-				&sc132gs_ctrl_ops, V4L2_CID_TEST_PATTERN,
+-				ARRAY_SIZE(sc132gs_test_pattern_menu) - 1,
+-				0, 0, sc132gs_test_pattern_menu);
++	}
++
++	link_freq_size = ARRAY_SIZE(link_freq_menu_items) - 1;
++	sc132gs->link_freq = v4l2_ctrl_new_int_menu(handler, &sc132gs_ctrl_ops,
++			V4L2_CID_LINK_FREQ,
++			link_freq_size, 0, link_freq_menu_items);
++	if (sc132gs->link_freq)
++		sc132gs->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
++	sc132gs->pixel_rate = v4l2_ctrl_new_std(handler, &sc132gs_ctrl_ops,
++			V4L2_CID_PIXEL_RATE,
++			PIXEL_RATE, PIXEL_RATE, 1, PIXEL_RATE);
+ 
+ 	if (handler->error) {
+ 		ret = handler->error;
+-		dev_err(&sc132gs->client->dev,
+-			"Failed to init controls(%d)\n", ret);
+-		goto err_free_handler;
++		dev_err(dev, "Failed to init controls, err %d\n", ret);
++		goto free_handler;
+ 	}
+ 
+-	sc132gs->subdev.ctrl_handler = handler;
+-
+ 	return 0;
+ 
+-err_free_handler:
++free_handler:
+ 	v4l2_ctrl_handler_free(handler);
+-
+ 	return ret;
+ }
+ 
+-static int sc132gs_check_sensor_id(struct sc132gs *sc132gs,
+-				  struct i2c_client *client)
+-{
+-	struct device *dev = &sc132gs->client->dev;
+-	u32 id = 0;
+-	int ret;
+-
+-	ret = sc132gs_read_reg(client, SC132GS_REG_CHIP_ID,
+-			      SC132GS_REG_VALUE_16BIT, &id);
+-	if (id != CHIP_ID) {
+-		dev_err(dev, "Unexpected sensor id(%04x), ret(%d)\n", id, ret);
+-		return -ENODEV;
+-	}
+-
+-	dev_info(dev, "Detected SC132GS CHIP ID = 0x%04x sensor\n", CHIP_ID);
+-
+-	return 0;
+-}
+-
+-static int sc132gs_configure_regulators(struct sc132gs *sc132gs)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < SC132GS_NUM_SUPPLIES; i++)
+-		sc132gs->supplies[i].supply = sc132gs_supply_names[i];
+-
+-	return devm_regulator_bulk_get(&sc132gs->client->dev,
+-				       SC132GS_NUM_SUPPLIES,
+-				       sc132gs->supplies);
+-}
+-
+-static int sc132gs_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int sc132gs_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ {
++	struct v4l2_subdev *sd;
++	struct v4l2_ctrl_handler *handler;
+ 	struct device *dev = &client->dev;
+-	struct device_node *node = dev->of_node;
+ 	struct sc132gs *sc132gs;
+-	struct v4l2_subdev *sd;
+-	char facing[2];
+ 	int ret;
+ 
+-	dev_info(dev, "driver version: %02x.%02x.%02x",
+-		DRIVER_VERSION >> 16,
+-		(DRIVER_VERSION & 0xff00) >> 8,
+-		DRIVER_VERSION & 0x00ff);
+-
+-	sc132gs = devm_kzalloc(dev, sizeof(*sc132gs), GFP_KERNEL);
++	sc132gs = devm_kzalloc(dev, sizeof(struct sc132gs), GFP_KERNEL);
+ 	if (!sc132gs)
+ 		return -ENOMEM;
+ 
+-	ret = of_property_read_u32(node, RKMODULE_CAMERA_MODULE_INDEX,
+-				   &sc132gs->module_index);
+-	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_FACING,
+-				       &sc132gs->module_facing);
+-	ret |= of_property_read_string(node, RKMODULE_CAMERA_MODULE_NAME,
+-				       &sc132gs->module_name);
+-	ret |= of_property_read_string(node, RKMODULE_CAMERA_LENS_NAME,
+-				       &sc132gs->len_name);
+-	if (ret) {
+-		dev_err(dev, "could not get module information!\n");
+-		return -EINVAL;
+-	}
++	sc132gs_struct_init(sc132gs);
++
+ 	sc132gs->client = client;
+-	sc132gs->cur_mode = &supported_modes[0];
++	sd = &sc132gs->subdev;
++	handler = &sc132gs->ctrl_handler;
+ 
+ 	sc132gs->xvclk = devm_clk_get(dev, "xvclk");
+ 	if (IS_ERR(sc132gs->xvclk)) {
+ 		dev_err(dev, "Failed to get xvclk\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto free_dev;
+ 	}
+ 
+-	sc132gs->pwdn_gpio = devm_gpiod_get(dev, "pwdn", GPIOD_OUT_LOW);
+-	if (IS_ERR(sc132gs->pwdn_gpio))
+-		dev_warn(dev, "Failed to get pwdn-gpios\n");
+-	ret = sc132gs_configure_regulators(sc132gs);
+-	if (ret) {
+-		dev_err(dev, "Failed to get power regulators\n");
+-		return ret;
+-	}
++	sc132gs->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
++	if (IS_ERR(sc132gs->reset_gpio))
++		dev_warn(dev, "warn: Failed to get reset-gpios\n");
+ 
+-	sc132gs->pinctrl = devm_pinctrl_get(dev);
+-	if (!IS_ERR(sc132gs->pinctrl)) {
+-		sc132gs->pins_default =
+-			pinctrl_lookup_state(sc132gs->pinctrl,
+-					     OF_CAMERA_PINCTRL_STATE_DEFAULT);
+-		if (IS_ERR(sc132gs->pins_default))
+-			dev_err(dev, "could not get default pinstate\n");
+-
+-		sc132gs->pins_sleep =
+-			pinctrl_lookup_state(sc132gs->pinctrl,
+-					     OF_CAMERA_PINCTRL_STATE_SLEEP);
+-		if (IS_ERR(sc132gs->pins_sleep))
+-			dev_err(dev, "could not get sleep pinstate\n");
+-	}
+-	mutex_init(&sc132gs->mutex);
++	sc132gs->poweroff_gpio = devm_gpiod_get(dev, "poweroff", GPIOD_OUT_LOW);
++	if (IS_ERR(sc132gs->poweroff_gpio))
++		dev_warn(dev, "warn: Failed to get poweroff-gpios\n");
+ 
+-	sd = &sc132gs->subdev;
+-	v4l2_i2c_subdev_init(sd, client, &sc132gs_subdev_ops);
+-	ret = sc132gs_initialize_controls(sc132gs);
++	ret = sc132gs_check_sensor_id(client);
+ 	if (ret)
+-		goto err_destroy_mutex;
++		goto free_dev;
+ 
+-	ret = __sc132gs_power_on(sc132gs);
+-	if (ret)
+-		goto err_free_handler;
++	mutex_init(&sc132gs->mutex);
+ 
+-	ret = sc132gs_check_sensor_id(sc132gs, client);
+-	if (ret)
+-		goto err_power_off;
++	v4l2_i2c_subdev_init(sd, client, &sc132gs_subdev_ops);
+ 
+-#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
++	ret = sc132gs_init_controls(sc132gs);
++	if (ret) {
++		dev_err(dev, "sc132gs init controls failed\n");
++		goto free_mutex;
++	}
++
++	sd->ctrl_handler = handler;
+ 	sd->internal_ops = &sc132gs_internal_ops;
+-	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+-		     V4L2_SUBDEV_FL_HAS_EVENTS;
+-#endif
+-#if defined(CONFIG_MEDIA_CONTROLLER)
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
++
+ 	sc132gs->pad.flags = MEDIA_PAD_FL_SOURCE;
+ 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	ret = media_entity_pads_init(&sd->entity, 1, &sc132gs->pad);
+-	if (ret < 0)
+-		goto err_power_off;
+-#endif
+-
+-	memset(facing, 0, sizeof(facing));
+-	if (strcmp(sc132gs->module_facing, "back") == 0)
+-		facing[0] = 'b';
+-	else
+-		facing[0] = 'f';
++	if (ret) {
++		dev_err(dev, "media_entity_pads_init() failed, ret %d\n", ret);
++		goto free_control;
++	}
+ 
+-	snprintf(sd->name, sizeof(sd->name), "m%02d_%s_%s %s",
+-		 sc132gs->module_index, facing,
+-		 SC132GS_NAME, dev_name(sd->dev));
++	snprintf(sd->name, sizeof(sd->name), "sc132gs-%s", dev_name(sd->dev));
+ 	ret = v4l2_async_register_subdev_sensor_common(sd);
+ 	if (ret) {
+-		dev_err(dev, "v4l2 async register subdev failed\n");
+-		goto err_clean_entity;
++		dev_err(dev, "v4l2_async_register_subdev_sensor_common() failed, ret %d\n", ret);
++		goto free_media;
+ 	}
+ 
+-	pm_runtime_set_active(dev);
+-	pm_runtime_enable(dev);
+-	pm_runtime_idle(dev);
+-
++	dev_info(dev, "sensor `%s` registered\n", sd->name);
+ 	return 0;
+ 
+-err_clean_entity:
+-#if defined(CONFIG_MEDIA_CONTROLLER)
++free_media:
+ 	media_entity_cleanup(&sd->entity);
+-#endif
+-err_power_off:
+-	__sc132gs_power_off(sc132gs);
+-err_free_handler:
++
++free_control:
+ 	v4l2_ctrl_handler_free(&sc132gs->ctrl_handler);
+-err_destroy_mutex:
++
++free_mutex:
+ 	mutex_destroy(&sc132gs->mutex);
+ 
++free_dev:
++	if (!IS_ERR(sc132gs->xvclk))
++		devm_clk_put(dev, sc132gs->xvclk);
++
++	if (!IS_ERR(sc132gs->reset_gpio))
++		devm_gpiod_put(dev, sc132gs->reset_gpio);
++
++	if (!IS_ERR(sc132gs->poweroff_gpio))
++		devm_gpiod_put(dev, sc132gs->poweroff_gpio);
++
++	devm_kfree(dev, sc132gs);
++	dev_info(dev, "sensor register failed\n");
+ 	return ret;
+ }
+ 
+ static int sc132gs_remove(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+-	struct sc132gs *sc132gs = to_sc132gs(sd);
++	struct sc132gs *sc132gs = container_of(sd, struct sc132gs, subdev);
++	struct device *dev = &client->dev;
++
++	dev_info(dev, "unregistering sc132gs\n");
+ 
+ 	v4l2_async_unregister_subdev(sd);
+-#if defined(CONFIG_MEDIA_CONTROLLER)
+ 	media_entity_cleanup(&sd->entity);
+-#endif
+ 	v4l2_ctrl_handler_free(&sc132gs->ctrl_handler);
+-	mutex_destroy(&sc132gs->mutex);
+ 
+-	pm_runtime_disable(&client->dev);
+-	if (!pm_runtime_status_suspended(&client->dev))
+-		__sc132gs_power_off(sc132gs);
+-	pm_runtime_set_suspended(&client->dev);
++	mutex_destroy(&sc132gs->mutex);
+ 
++	devm_kfree(dev, sc132gs);
+ 	return 0;
+ }
+ 
+-#if IS_ENABLED(CONFIG_OF)
+ static const struct of_device_id sc132gs_of_match[] = {
+ 	{ .compatible = "smartsens,sc132gs" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, sc132gs_of_match);
+-#endif
+ 
+ static const struct i2c_device_id sc132gs_match_id[] = {
+ 	{ "smartsens,sc132gs", 0 },
+@@ -1220,8 +948,7 @@ static const struct i2c_device_id sc132gs_match_id[] = {
+ 
+ static struct i2c_driver sc132gs_i2c_driver = {
+ 	.driver = {
+-		.name = SC132GS_NAME,
+-		.pm = &sc132gs_pm_ops,
++		.name = "sc132gs",
+ 		.of_match_table = of_match_ptr(sc132gs_of_match),
+ 	},
+ 	.probe		= &sc132gs_probe,
+@@ -1242,5 +969,7 @@ static void __exit sensor_mod_exit(void)
+ device_initcall_sync(sensor_mod_init);
+ module_exit(sensor_mod_exit);
+ 
+-MODULE_DESCRIPTION("Smartsens sc132gs sensor driver");
+-MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("smartsens sc132gs sensor driver");
++MODULE_AUTHOR("Nick Ying");
++MODULE_LICENSE("GPL");
++
+diff --git a/drivers/media/i2c/sc132gs_ioctl.h b/drivers/media/i2c/sc132gs_ioctl.h
+new file mode 100644
+index 000000000..22cffb7ca
+--- /dev/null
++++ b/drivers/media/i2c/sc132gs_ioctl.h
+@@ -0,0 +1,65 @@
++#ifndef SC132GS_IOCTL_H
++#define SC132GS_IOCTL_H
++
++#include <linux/types.h>
++
++#define SC132GS_REG_EXPOSURE_H		    0x3e00
++#define SC132GS_REG_EXPOSURE_M		    0x3e01
++#define SC132GS_REG_EXPOSURE_L		    0x3e02
++
++#define SC132GS_FETCH_EXP_H(VAL)		(((VAL) >> 16) & 0xF)
++#define SC132GS_FETCH_EXP_M(VAL)		(((VAL) >> 8) & 0xFF)
++#define SC132GS_FETCH_EXP_L(VAL)		(((VAL) & 0xFF))
++
++#define SC132GS_REG_DIG_GAIN		    0x3e06
++#define SC132GS_REG_DIG_FINE_GAIN	    0x3e07
++#define SC132GS_REG_ANA_GAIN		    0x3e08
++#define SC132GS_REG_ANA_FINE_GAIN       0x3e09
++
++#define SC132GS_IOCTL_BASE  (192+20)
++
++/**
++ * 需要 open /dev/videox 前进行设置;
++ */
++
++struct sc132gs_gain_t {
++    unsigned int again;
++    unsigned int again_fine;
++    unsigned int dgain;
++    unsigned int dgain_fine;
++};
++
++/**
++ * trigger 模式下设置曝光时间;
++ */
++struct sc132gs_exposure_t {
++    unsigned int exposure_us;
++};
++
++#define SC132GS_IO_Set_Exposure     _IOW('V', SC132GS_IOCTL_BASE + 0, struct sc132gs_exposure_t)
++#define SC132GS_IO_Get_Exposure     _IOR('V', SC132GS_IOCTL_BASE + 1, struct sc132gs_exposure_t)
++#define SC132GS_IO_Set_Gain         _IOW('V', SC132GS_IOCTL_BASE + 2, struct sc132gs_gain_t)
++#define SC132GS_IO_Get_Gain         _IOR('V', SC132GS_IOCTL_BASE + 3, struct sc132gs_gain_t)
++
++static const char *cmd_str(unsigned int cmd)
++{
++	switch (cmd) {
++	case PREISP_CMD_SET_HDRAE_EXP:
++		return "PREISP_CMD_SET_HDRAE_EXP";
++	case RKMODULE_GET_MODULE_INFO:
++		return "RKMODULE_GET_MODULE_INFO";
++	case RKMODULE_GET_HDR_CFG:
++		return "RKMODULE_GET_HDR_CFG";
++	case RKMODULE_SET_HDR_CFG:
++		return "RKMODULE_SET_HDR_CFG";
++	case RKMODULE_SET_QUICK_STREAM:
++		return "RKMODULE_SET_QUICK_STREAM";
++	case RKMODULE_GET_SONY_BRL:
++		return "RKMODULE_GET_SONY_BRL";
++	case RKMODULE_AWB_CFG:
++		return "RKMODULE_AWB_CFG";
++	}
++	return "N/A";
++}
++
++#endif
+diff --git a/make.sh b/make.sh
+index 96caffcd3..328fd7439 100755
+--- a/make.sh
++++ b/make.sh
+@@ -4,7 +4,7 @@
+ RK_ARCH=arm64
+ RK_DEFCONFIG=rockchip_linux_defconfig
+ RK_DEFCONFIG_FRAGMENT=
+-RK_DTS=rk3568-atk-evb1-mipi-dsi-720p
++RK_DTS=rk3568-atk-atompi-ca1
+ RK_JOBS=24
+ 
+ while [ $# -gt 0 ]; do
+@@ -52,6 +52,8 @@ make ARCH=$RK_ARCH $RK_DEFCONFIG $RK_DEFCONFIG_FRAGMENT
+ # 编译
+ make ARCH=$RK_ARCH $RK_DTS.img -j$RK_JOBS
+ 
++exit 0
++
+ echo "#################################################"
+ if [ $RK_DTS != "rk3568-atk-atompi-ca1" ]
+ then
+-- 
+2.25.1
+
