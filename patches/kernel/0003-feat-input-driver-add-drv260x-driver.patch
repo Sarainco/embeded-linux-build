@@ -1,0 +1,205 @@
+From 3760b47f8a2bb3640aa1c49b202c92cc8e495906 Mon Sep 17 00:00:00 2001
+From: yuji <yujibuzailai_sun@outlook.com>
+Date: Wed, 4 Jun 2025 09:59:36 +0800
+Subject: [PATCH] feat(input driver) add drv260x driver
+
+---
+ .../dts/rockchip/rk3568-atk-atompi-ca1.dts    | 47 +++++++++++++++----
+ arch/arm64/configs/rockchip_linux_defconfig   |  2 +-
+ drivers/misc/dlpc3430.c                       | 46 +++++++++++++++++-
+ 3 files changed, 83 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
+index c6f0cdb3a..d59480226 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-atk-atompi-ca1.dts
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include "rk3568-atk-atompi-ca1.dtsi"
++#include <dt-bindings/input/ti-drv260x.h>
+ 
+ / {
+ 	chosen: chosen {
+@@ -106,7 +107,7 @@
+ 		//enable-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_HIGH>;
+ 		//reset-gpios = <&gpio4 RK_PC7 GPIO_ACTIVE_LOW>;
+ 
+-	    //bus-format = <MEDIA_BUS_FMT_RGB565_1X16>;
++	    bus-format = <MEDIA_BUS_FMT_RGB565_1X16>;
+ 
+ 		display-timings {
+ 			native-mode = <&rgb_timing0>;
+@@ -115,16 +116,16 @@
+ 				clock-frequency = <62000000>;
+ 				hactive = <720>;
+ 				vactive = <480>;
+-				hback-porch = <80>;
+-				hfront-porch = <70>;
++				hback-porch = <6>;
++				hfront-porch = <9>;
+ 				vback-porch = <10>;
+-				vfront-porch = <10>;
+-				hsync-len = <10>;
+-				vsync-len = <3>;
+-				hsync-active = <0>;
+-				vsync-active = <0>;
+-				de-active = <0>;
+-				pixelclk-active = <0>;
++				vfront-porch = <4>;
++				hsync-len = <44>;
++				vsync-len = <13>;
++				hsync-active = <1>;
++				vsync-active = <1>;
++				de-active = <1>;
++				pixelclk-active = <1>;
+ 			};
+ 		};
+ 
+@@ -572,4 +573,30 @@
+ 
+ &gmac1 {
+ 	status = "disabled";
++};
++
++&i2c2 {
++	status = "okay";
++
++	dlpc3430: dlpc3430@36 {
++		compatible = "ti,dlpc3430";
++		reg = <0x36>;
++		proj-on-gpios = <&gpio2 RK_PD1 GPIO_ACTIVE_HIGH>;
++	};
++
++};
++
++&i2c3 {
++	status = "okay";
++
++	haptics: haptics@5a {
++		compatible = "ti,drv2605l";
++		reg = <0x5a>;
++		//vbat-supply = <&vbat>;
++		enable-gpio = <&gpio1 RK_PA4 GPIO_ACTIVE_HIGH>;
++		mode = <DRV260X_LRA_MODE>;
++		library-sel = <DRV260X_LIB_LRA>;
++		vib-rated-mv = <3200>;
++		vib-overdrive-mv = <3200>;
++	};
+ };
+\ No newline at end of file
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index bfe48b919..f5425fc3a 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -213,7 +213,6 @@ CONFIG_WIFI_GENERATE_RANDOM_MAC_ADDR=y
+ CONFIG_AP6XXX=m
+ CONFIG_RTL8852BS=m
+ CONFIG_USB_NET_RNDIS_WLAN=y
+-CONFIG_INPUT_FF_MEMLESS=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_KEYBOARD_ADC=y
+ # CONFIG_KEYBOARD_ATKBD is not set
+@@ -252,6 +251,7 @@ CONFIG_PS_AP321XX=y
+ CONFIG_INPUT_MISC=y
+ CONFIG_INPUT_UINPUT=y
+ CONFIG_INPUT_RK805_PWRKEY=y
++CONFIG_INPUT_DRV260X_HAPTICS=y
+ # CONFIG_SERIO is not set
+ CONFIG_VT_HW_CONSOLE_BINDING=y
+ # CONFIG_LEGACY_PTYS is not set
+diff --git a/drivers/misc/dlpc3430.c b/drivers/misc/dlpc3430.c
+index 177ce2496..87ee8c3d0 100644
+--- a/drivers/misc/dlpc3430.c
++++ b/drivers/misc/dlpc3430.c
+@@ -13,13 +13,14 @@
+ #include <linux/ioctl.h>
+ 
+ #define DLPC3430_NAME          "dlpc3430"
+-//#define DLPC3430_I2C_ADDR      0x1b
+ #define DLPC3430_CLASS_NAME    "dlpc"
+ 
+ #define DLPC3430_IOCTL_MAGIC      'D'
+ #define DLPC3430_IOCTL_POWER_ON   _IO(DLPC3430_IOCTL_MAGIC, 0x01)
+ #define DLPC3430_IOCTL_POWER_OFF  _IO(DLPC3430_IOCTL_MAGIC, 0x02)
+ #define DLPC3430_IOCTL_SET_BRIGHTNESS _IOW(DLPC3430_IOCTL_MAGIC, 0x03, int)
++#define DLPC3430_IOCTL_REG_INIT _IO(DLPC3430_IOCTL_MAGIC, 0x04)
++
+ 
+ struct dlpc3430_data {
+     struct i2c_client *client;
+@@ -45,14 +46,21 @@ static int dlpc3430_write(struct i2c_client *client, u8 *data, int len)
+ 
+ static void dlpc3430_hw_on(struct dlpc3430_data *data)
+ {
++    u8 cmd[2] = { 0x52, 0x07 };
++
+     gpiod_set_value_cansleep(data->proj_on_gpio, 0);
+     msleep(1000);
+     gpiod_set_value_cansleep(data->proj_on_gpio, 1);
+     msleep(2000);
++
++    i2c_master_send(data->client, cmd, 2);
+ }
+ 
+ static void dlpc3430_hw_off(struct dlpc3430_data *data)
+ {
++    u8 cmd[2] = { 0x52, 0x00 };
++    i2c_master_send(data->client, cmd, 2);
++
+     gpiod_set_value_cansleep(data->proj_on_gpio, 0);
+ }
+ 
+@@ -77,6 +85,40 @@ static int dlpc3430_open(struct inode *inode, struct file *file)
+     return 0;
+ }
+ 
++static int dlpc3430_reg_init(struct i2c_client *client)
++{
++    int ret;
++    int i;
++    struct {
++        const u8 *data;
++        size_t len;
++    } seqs[] = {
++        { (u8[]){0x16, 0x01}, 2 },
++        { (u8[]){0x10, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x02, 0xe0, 0x01}, 9 },
++        { (u8[]){0x12, 67, 0x00, 0x00, 0x00, 0xd0, 0x02, 0xe0, 0x01}, 9 },
++        { (u8[]){0x2e, 0xd0, 0x02, 0xE0, 0x01}, 5 },
++        { (u8[]){0x14, 0x04}, 2 },
++        { (u8[]){0x07, 0x40}, 2 },
++        { (u8[]){0x05, 0x00}, 2 },
++        // repeat
++        { (u8[]){0x14, 0x04}, 2 },
++        { (u8[]){0x07, 0x40}, 2 },
++        { (u8[]){0x05, 0x00}, 2 },
++        { (u8[]){0x16, 0x00}, 2 },
++    };
++
++    for (i = 0; i < ARRAY_SIZE(seqs); i++) {
++        ret = i2c_master_send(client, seqs[i].data, seqs[i].len);
++        if (ret < 0) {
++            dev_err(&client->dev, "I2C reg_init failed at step %d, ret=%d\n", i, ret);
++            return ret;
++        }
++    }
++
++    return 0;
++}
++
++
+ static long dlpc3430_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ {
+     struct dlpc3430_data *data = file->private_data;
+@@ -96,6 +138,8 @@ static long dlpc3430_ioctl(struct file *file, unsigned int cmd, unsigned long ar
+             }
+             dlpc3430_set_brightness(data, brightness);
+             break;
++        case DLPC3430_IOCTL_REG_INIT:
++            dlpc3430_reg_init(data->client);
+         default:
+             mutex_unlock(&data->lock);
+             return -EINVAL;
+-- 
+2.25.1
+
